@@ -18,11 +18,10 @@
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
 
+      <!-- Logo: usa a imagem salva em assets/images/logo.png -->
       <a href="/" class="nav-logo">
-        <div class="logo-mark">RG</div>
-        <div class="logo-text">
-          <span class="logo-name">Performance</span>
-          <span class="logo-tagline">Assessoria de Crescimento</span>
+        <div class="logo-img-crop">
+          <img src="assets/images/logo.png" alt="RG Performance" />
         </div>
       </a>
 
@@ -36,7 +35,7 @@
       </div>
 
       <a href="#contact" class="nav-cta">
-        Diagnóstico Gratuito
+        Solicitar Diagnóstico
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -51,10 +50,8 @@
     <!-- Background layers -->
     <div class="hero-bg" aria-hidden="true">
       <div class="hero-img">
-        <!--
-          PLACEHOLDER: Substitua esta div por uma tag <img> com o consultório médico.
-          Exemplo: <img src="assets/images/clinica.jpg" alt="" />
-        -->
+        <!-- Imagem do consultório: salve como assets/images/clinica.jpg -->
+        <img src="assets/images/clinica.jpg" alt="" />
       </div>
       <div class="hero-overlay"></div>
       <div class="glow glow-tl"></div>
@@ -136,32 +133,20 @@
             </a>
           </div>
 
-          <div class="fc-founders">
-            <div class="fc-founder">
-              <div class="fc-photo" aria-label="Foto placeholder">
-                <!--
-                  PLACEHOLDER: Substitua pelo <img> quando enviar a foto.
-                  Exemplo: <img src="assets/images/fundador-1.jpg" alt="Nome" />
-                -->
-                <span class="fc-photo-label">Foto</span>
+          <!-- Foto dos fundadores preenchendo a box inteira -->
+          <div class="fc-photo-full">
+            <!-- Foto: salve como assets/images/fundadores.jpg -->
+            <img src="assets/images/fundadores.jpg" alt="Gabriel e Rodrigo Pereira" />
+            <!-- Mini-box com os nomes sobreposta na foto -->
+            <div class="fc-names-box">
+              <div class="fc-name-row">
+                <span class="fc-person-name">Gabriel Pereira</span>
+                <span class="fc-person-role">Co-fundador</span>
               </div>
-              <div class="fc-info">
-                <span class="fc-name">Seu Nome</span>
-                <span class="fc-role">Co-fundador · Estratégia</span>
-              </div>
-            </div>
-
-            <div class="fc-founder">
-              <div class="fc-photo" aria-label="Foto placeholder">
-                <!--
-                  PLACEHOLDER: Substitua pelo <img> quando enviar a foto.
-                  Exemplo: <img src="assets/images/fundador-2.jpg" alt="Nome" />
-                -->
-                <span class="fc-photo-label">Foto</span>
-              </div>
-              <div class="fc-info">
-                <span class="fc-name">Nome Sócio</span>
-                <span class="fc-role">Co-fundador · Operação</span>
+              <div class="fc-names-divider"></div>
+              <div class="fc-name-row">
+                <span class="fc-person-name">Rodrigo Pereira</span>
+                <span class="fc-person-role">Co-fundador</span>
               </div>
             </div>
           </div>
