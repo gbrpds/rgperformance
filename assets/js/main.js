@@ -28,12 +28,29 @@ if (cursor && cursorDot) {
     requestAnimationFrame(animateCursor);
   })();
 
-  const hoverTargets = 'a, button, .service-item, .work-card, .tool-tag, .nav-link';
+  const hoverTargets = 'a, button, .service-item, .work-card, .tool-tag';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 }
+
+
+// ── Live BRT clock ─────────────────────────────────────
+const clockEl = document.getElementById('navClock');
+
+function updateClock() {
+  const now = new Date();
+  // BRT = UTC-3
+  const brt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const hh  = String(brt.getHours()).padStart(2, '0');
+  const mm  = String(brt.getMinutes()).padStart(2, '0');
+  const ss  = String(brt.getSeconds()).padStart(2, '0');
+  if (clockEl) clockEl.textContent = `BRT ${hh}:${mm}:${ss}`;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
 
 
 // ── Navbar scroll state ────────────────────────────────
@@ -44,7 +61,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 
-// ── Scroll reveal (IntersectionObserver) ───────────────
+// ── Scroll reveal ──────────────────────────────────────
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
@@ -56,7 +73,7 @@ const revealObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
 
-// ── Hero reveal on page load ───────────────────────────
+// ── Hero reveal on load ────────────────────────────────
 function heroReveal() {
   document.querySelectorAll('.hero [data-reveal]').forEach(el => {
     const delay = parseInt(el.dataset.revealDelay || '0');
@@ -71,31 +88,7 @@ if (document.readyState === 'loading') {
 }
 
 
-// ── Counter animation ──────────────────────────────────
-function animateCount(el, target, duration) {
-  const start = performance.now();
-  (function tick(now) {
-    const t = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = Math.round(eased * target);
-    if (t < 1) requestAnimationFrame(tick);
-  })(performance.now());
-}
-
-const counterObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el     = entry.target;
-    const target = parseInt(el.dataset.count, 10);
-    animateCount(el, target, 1400);
-    counterObserver.unobserve(el);
-  });
-}, { threshold: 0.6 });
-
-document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
-
-
-// ── Smooth scroll for anchor links ────────────────────
+// ── Smooth scroll ──────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
     const target = document.querySelector(anchor.getAttribute('href'));
