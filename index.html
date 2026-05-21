@@ -21,9 +21,7 @@
   <!-- ═══════════════════ NAVBAR ═══════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-
       <a href="/" class="nav-logo">Gabriel©</a>
-
       <ul class="nav-links" role="list">
         <li><a href="#home" class="nav-link">Início</a></li>
         <li class="nav-sep" aria-hidden="true">·</li>
@@ -33,20 +31,22 @@
         <li class="nav-sep" aria-hidden="true">·</li>
         <li><a href="#contact" class="nav-link">Contato</a></li>
       </ul>
-
       <span class="nav-clock" id="navClock" aria-label="Horário atual">BRT 00:00:00</span>
-
     </div>
   </nav>
 
-  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <!-- ═══════════════════ HERO (fixed — sections slide over it) ═══════════════════ -->
   <section class="hero" id="home">
 
     <div class="hero-bg" aria-hidden="true">
       <div class="noise"></div>
+      <!-- Subtle orange light orbs -->
+      <div class="glow-orb glow-orb--1"></div>
+      <div class="glow-orb glow-orb--2"></div>
+      <div class="glow-orb glow-orb--3"></div>
     </div>
 
-    <div class="hero-content">
+    <div class="hero-content" id="heroContent">
 
       <div class="hero-badge" data-reveal>
         <span class="badge-pulse" aria-hidden="true"></span>
@@ -54,14 +54,14 @@
       </div>
 
       <h1 class="hero-h1" data-reveal data-reveal-delay="120">
-        Gabriel<br>Pereira
+        Gabriel Pereira
       </h1>
 
-      <p class="hero-role" data-reveal data-reveal-delay="220">
+      <p class="hero-role" data-reveal data-reveal-delay="240">
         Editor de Vídeos &amp; Designer Gráfico
       </p>
 
-      <div class="hero-actions" data-reveal data-reveal-delay="340">
+      <div class="hero-actions" data-reveal data-reveal-delay="360">
         <a href="#work" class="btn-primary">Ver Trabalhos</a>
         <a href="#contact" class="btn-outline">
           Entrar em contato
@@ -73,13 +73,13 @@
 
     </div>
 
-    <!-- Marquee bar -->
+    <!-- Marquee bar at hero bottom -->
     <div class="marquee-bar" aria-hidden="true">
       <div class="marquee-track">
         <span>Reels</span><span class="m-sep">·</span>
         <span>YouTube</span><span class="m-sep">·</span>
         <span>Motion Graphics</span><span class="m-sep">·</span>
-        <span>Podcasts</span><span class="m-sep">·</span>
+        <span>Landing Pages</span><span class="m-sep">·</span>
         <span>Comerciais</span><span class="m-sep">·</span>
         <span>Design Gráfico</span><span class="m-sep">·</span>
         <span>Color Grading</span><span class="m-sep">·</span>
@@ -87,7 +87,7 @@
         <span>Reels</span><span class="m-sep">·</span>
         <span>YouTube</span><span class="m-sep">·</span>
         <span>Motion Graphics</span><span class="m-sep">·</span>
-        <span>Podcasts</span><span class="m-sep">·</span>
+        <span>Landing Pages</span><span class="m-sep">·</span>
         <span>Comerciais</span><span class="m-sep">·</span>
         <span>Design Gráfico</span><span class="m-sep">·</span>
         <span>Color Grading</span><span class="m-sep">·</span>
@@ -97,11 +97,14 @@
 
   </section>
 
+  <!-- Spacer — creates scroll space for the fixed hero -->
+  <div class="hero-spacer" aria-hidden="true"></div>
+
   <!-- ═══════════════════ WORK ═══════════════════ -->
   <section class="section" id="work">
     <div class="section-inner">
 
-      <header class="section-header" data-reveal>
+      <header class="section-header" data-reveal="slide-x">
         <span class="section-num">01</span>
         <h2 class="section-title">Trabalhos Selecionados</h2>
       </header>
@@ -112,7 +115,7 @@
           <div class="work-thumb work-thumb--1">
             <div class="work-thumb-overlay">
               <span class="work-play-icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
                 </svg>
               </span>
@@ -128,7 +131,7 @@
           <div class="work-thumb work-thumb--2">
             <div class="work-thumb-overlay">
               <span class="work-play-icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
                 </svg>
               </span>
@@ -144,7 +147,7 @@
           <div class="work-thumb work-thumb--3">
             <div class="work-thumb-overlay">
               <span class="work-play-icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
                 </svg>
               </span>
@@ -164,7 +167,7 @@
   <section class="section" id="services">
     <div class="section-inner">
 
-      <header class="section-header" data-reveal>
+      <header class="section-header" data-reveal="slide-x">
         <span class="section-num">02</span>
         <h2 class="section-title">O que eu faço</h2>
       </header>
@@ -182,7 +185,7 @@
           </svg>
         </article>
 
-        <article class="service-item" data-reveal>
+        <article class="service-item" data-reveal data-reveal-delay="80">
           <span class="service-num" aria-hidden="true">02</span>
           <div class="service-body">
             <h3 class="service-name">YouTube &amp; Long-form</h3>
@@ -193,7 +196,7 @@
           </svg>
         </article>
 
-        <article class="service-item" data-reveal>
+        <article class="service-item" data-reveal data-reveal-delay="160">
           <span class="service-num" aria-hidden="true">03</span>
           <div class="service-body">
             <h3 class="service-name">Motion Graphics &amp; VFX</h3>
@@ -204,7 +207,7 @@
           </svg>
         </article>
 
-        <article class="service-item" data-reveal>
+        <article class="service-item" data-reveal data-reveal-delay="240">
           <span class="service-num" aria-hidden="true">04</span>
           <div class="service-body">
             <h3 class="service-name">Design Gráfico</h3>
@@ -215,11 +218,11 @@
           </svg>
         </article>
 
-        <article class="service-item" data-reveal>
+        <article class="service-item" data-reveal data-reveal-delay="320">
           <span class="service-num" aria-hidden="true">05</span>
           <div class="service-body">
-            <h3 class="service-name">Podcasts em Vídeo</h3>
-            <p class="service-desc">Edição multicâmera, correção de cor, áudio tratado e entrega em múltiplos formatos de tela.</p>
+            <h3 class="service-name">Criação de Landing Pages</h3>
+            <p class="service-desc">Páginas de alta conversão com design minimalista, animações fluídas e foco total na experiência do usuário.</p>
           </div>
           <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -234,9 +237,9 @@
   <section class="section" id="about">
     <div class="section-inner">
 
-      <header class="section-header" data-reveal>
+      <header class="section-header" data-reveal="slide-x">
         <span class="section-num">03</span>
-        <h2 class="section-title">Sobre</h2>
+        <h2 class="section-title">Sobre mim</h2>
       </header>
 
       <div class="about-cols">
@@ -271,7 +274,7 @@
           <div class="photo-placeholder">
             <div class="photo-grid" aria-hidden="true"></div>
             <div class="photo-label">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
                 <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5"/>
                 <circle cx="17.5" cy="8" r="1" fill="currentColor"/>

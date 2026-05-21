@@ -28,7 +28,7 @@ if (cursor && cursorDot) {
     requestAnimationFrame(animateCursor);
   })();
 
-  const hoverTargets = 'a, button, .service-item, .work-card, .tool-tag';
+  const hoverTargets = 'a, button, .service-item, .work-card, .tool-tag, .nav-link';
   document.querySelectorAll(hoverTargets).forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -36,44 +36,86 @@ if (cursor && cursorDot) {
 }
 
 
+// ── Cursor glow (body::after tracks the mouse) ─────────
+document.addEventListener('mousemove', e => {
+  document.documentElement.style.setProperty('--cx', `${e.clientX}px`);
+  document.documentElement.style.setProperty('--cy', `${e.clientY}px`);
+  document.body.classList.add('cursor-active');
+});
+document.addEventListener('mouseleave', () => {
+  document.body.classList.remove('cursor-active');
+});
+
+
 // ── Live BRT clock ─────────────────────────────────────
 const clockEl = document.getElementById('navClock');
 
 function updateClock() {
-  const now = new Date();
-  // BRT = UTC-3
-  const brt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const brt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
   const hh  = String(brt.getHours()).padStart(2, '0');
   const mm  = String(brt.getMinutes()).padStart(2, '0');
   const ss  = String(brt.getSeconds()).padStart(2, '0');
   if (clockEl) clockEl.textContent = `BRT ${hh}:${mm}:${ss}`;
 }
-
 updateClock();
 setInterval(updateClock, 1000);
 
 
-// ── Navbar scroll state ────────────────────────────────
+// ── Navbar scroll ──────────────────────────────────────
 const navbar = document.getElementById('navbar');
-
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 16);
 }, { passive: true });
 
 
-// ── Scroll reveal ──────────────────────────────────────
+// ── Hero blur + scale on scroll ────────────────────────
+// The hero is position:fixed; sections slide over it.
+// As user scrolls, the hero content blurs and scales down.
+const heroEl = document.querySelector('.hero');
+let rafHero  = false;
+
+function updateHero() {
+  const scrollY = window.scrollY;
+  const vph     = window.innerHeight;
+
+  // Blur starts at 20% of viewport, fully blurred at 80%
+  const progress = Math.max(0, Math.min(1, (scrollY - vph * 0.18) / (vph * 0.6)));
+
+  if (progress === 0) {
+    heroEl.style.filter    = '';
+    heroEl.style.transform = '';
+    heroEl.style.opacity   = '';
+  } else {
+    heroEl.style.filter    = `blur(${progress * 22}px)`;
+    heroEl.style.transform = `scale(${1 - progress * 0.055})`;
+    heroEl.style.opacity   = `${1 - progress * 0.45}`;
+  }
+
+  rafHero = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!rafHero) {
+    rafHero = true;
+    requestAnimationFrame(updateHero);
+  }
+}, { passive: true });
+
+
+// ── Scroll reveal (IntersectionObserver) ───────────────
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
     entry.target.classList.add('revealed');
     revealObserver.unobserve(entry.target);
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
+// Observe both [data-reveal] and [data-reveal="slide-x"]
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
 
-// ── Hero reveal on load ────────────────────────────────
+// ── Hero reveal on page load ───────────────────────────
 function heroReveal() {
   document.querySelectorAll('.hero [data-reveal]').forEach(el => {
     const delay = parseInt(el.dataset.revealDelay || '0');
@@ -88,12 +130,16 @@ if (document.readyState === 'loading') {
 }
 
 
-// ── Smooth scroll ──────────────────────────────────────
+// ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
-    const target = document.querySelector(anchor.getAttribute('href'));
+    const id     = anchor.getAttribute('href');
+    const target = document.querySelector(id);
     if (!target) return;
     e.preventDefault();
+
+    // Sections are stacked after the hero spacer.
+    // scrollIntoView works correctly since sections are in normal flow.
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
