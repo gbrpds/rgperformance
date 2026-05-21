@@ -502,6 +502,16 @@ body.cursor-active::after { opacity: 1; }
   cursor: pointer;
 }
 
+/* Images inside work thumbs fill the card */
+.work-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .work-thumb {
   position: relative;
   border-radius: 12px;
