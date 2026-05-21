@@ -130,6 +130,32 @@ if (document.readyState === 'loading') {
 }
 
 
+// ── Page transition helper ─────────────────────────────
+function navigateTo(url) {
+  document.body.classList.add('page-exit');
+  setTimeout(() => { window.location.href = url; }, 540);
+}
+
+
+// ── Work card clicks → page exit transition ────────────
+document.querySelectorAll('a.work-card').forEach(card => {
+  card.addEventListener('click', e => {
+    e.preventDefault();
+    navigateTo(card.href);
+  });
+});
+
+
+// ── Back link on work pages ────────────────────────────
+const backLink = document.getElementById('backLink');
+if (backLink) {
+  backLink.addEventListener('click', e => {
+    e.preventDefault();
+    navigateTo(backLink.href);
+  });
+}
+
+
 // ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
@@ -137,9 +163,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(id);
     if (!target) return;
     e.preventDefault();
-
-    // Sections are stacked after the hero spacer.
-    // scrollIntoView works correctly since sections are in normal flow.
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });

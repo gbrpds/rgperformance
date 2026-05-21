@@ -896,6 +896,308 @@ body.cursor-active::after { opacity: 1; }
 
 .footer-copy { font-size: 12px; color: var(--muted); }
 
+/* work-card as <a> element */
+a.work-card {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   PAGE TRANSITIONS
+   ═══════════════════════════════════════════════════════ */
+
+/* Entry animation — work pages only */
+.work-page {
+  animation: pageEnter 0.8s var(--ease) both;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; filter: blur(14px); }
+  to   { opacity: 1; filter: none; }
+}
+
+/* Exit animation — all pages */
+body.page-exit {
+  pointer-events: none;
+  animation: pageExit 0.52s var(--ease) forwards;
+}
+
+@keyframes pageExit {
+  to {
+    opacity: 0;
+    filter: blur(14px);
+    transform: scale(0.975);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   WORK PAGE HERO
+   ═══════════════════════════════════════════════════════ */
+
+/* Work page hero content — bottom-aligned */
+.wh-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: calc(var(--nav-h) + 32px) 40px 56px;
+  max-width: var(--max-w);
+  width: 100%;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+/* Back button */
+.back-link {
+  position: absolute;
+  top: calc(var(--nav-h) + 28px);
+  left: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted-lg);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.3s, gap 0.35s var(--ease);
+}
+.back-link:hover {
+  color: var(--text);
+  gap: 4px;
+}
+.back-link svg { transition: transform 0.3s var(--ease); flex-shrink: 0; }
+.back-link:hover svg { transform: translateX(-3px); }
+
+/* Project identity block */
+.wh-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wh-category {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wh-title {
+  font-size: clamp(44px, 6.5vw, 86px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  color: var(--text);
+}
+
+.wh-tagline {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--muted-lg);
+  max-width: 440px;
+  line-height: 1.7;
+}
+
+/* Tag pills */
+.wh-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wh-tag {
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-lg);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   PROJECT MAIN CONTENT
+   ═══════════════════════════════════════════════════════ */
+
+/* Full-width hero banner */
+.project-banner {
+  width: 100%;
+  margin-bottom: 64px;
+}
+
+.project-banner-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.project-banner-inner img,
+.project-banner-inner video,
+.project-banner-inner iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+.project-banner-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.project-banner-label svg { opacity: 0.4; }
+
+/* Description + Info two-column */
+.project-details {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 64px;
+  align-items: start;
+}
+
+.project-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pd-title {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.pd-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.78;
+  color: var(--muted-lg);
+  letter-spacing: -0.01em;
+}
+.pd-body--muted { color: var(--muted); }
+
+/* Info sidebar */
+.project-info {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.pi-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.pi-row:last-child { border-bottom: none; }
+
+.pi-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.pi-val {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   GALLERY
+   ═══════════════════════════════════════════════════════ */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+
+.gallery-item { border-radius: 12px; overflow: hidden; }
+
+.gallery-item--wide {
+  grid-column: span 2;
+}
+
+.gallery-placeholder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.4s, transform 0.45s var(--ease);
+}
+.gallery-item--wide .gallery-placeholder { aspect-ratio: 16 / 9; }
+
+.gallery-placeholder:hover {
+  border-color: var(--border-m);
+  transform: translateY(-4px);
+}
+
+.gallery-placeholder--alt  { background: #0f0f0f; }
+.gallery-placeholder--alt2 { background: #0d0d0d; }
+
+.gallery-placeholder-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  opacity: 0.35;
+}
+
+.gallery-placeholder img,
+.gallery-placeholder video,
+.gallery-placeholder iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
 
 /* ═══════════════════════════════════════════════════════
    REVEAL ANIMATIONS
