@@ -3,40 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RG Performance — Assessoria de Crescimento Digital para Médicos</title>
-  <meta name="description" content="Estruturamos o sistema comercial de médicos para gerar um fluxo previsível de consultas particulares com custo de aquisição controlado." />
+  <title>Gabriel Pereira dos Santos — Editor de Vídeos & Designer Gráfico</title>
+  <meta name="description" content="Editor de vídeos e designer gráfico. Transformo ideias em imagens que ficam na memória." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Manrope:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
   <!-- ═══════════════════ NAVBAR ═══════════════════ -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
 
-      <!-- Logo: usa a imagem salva em assets/images/logo.png -->
-      <a href="/" class="nav-logo">
-        <div class="logo-img-crop">
-          <img src="assets/images/logo.png" alt="RG Performance" />
-        </div>
-      </a>
+      <a href="/" class="nav-logo">Gabriel PS</a>
 
       <div class="nav-pill">
         <ul class="nav-links">
-          <li><a href="#method" class="nav-link">Método</a></li>
           <li><a href="#services" class="nav-link">Serviços</a></li>
-          <li><a href="#results" class="nav-link">Resultados</a></li>
+          <li><a href="#work" class="nav-link">Trabalhos</a></li>
           <li><a href="#about" class="nav-link">Sobre</a></li>
         </ul>
       </div>
 
       <a href="#contact" class="nav-cta">
-        Solicitar Diagnóstico
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        Contato
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
@@ -47,157 +45,326 @@
   <!-- ═══════════════════ HERO ═══════════════════ -->
   <section class="hero" id="home">
 
-    <!-- Background layers -->
     <div class="hero-bg" aria-hidden="true">
-      <div class="hero-img">
-        <!-- Imagem do consultório: salve como assets/images/clinica.jpg -->
-        <img src="assets/images/clinica.jpg" alt="" />
-      </div>
-      <div class="hero-overlay"></div>
-      <div class="glow glow-tl"></div>
-      <div class="glow glow-br"></div>
       <div class="noise"></div>
+      <div class="hero-gradient"></div>
     </div>
 
-    <!-- Content grid -->
     <div class="hero-container">
 
       <!-- Left: copy -->
-      <div class="hero-copy" data-reveal>
+      <div class="hero-copy">
 
-        <div class="hero-badge">
+        <div class="hero-badge" data-reveal>
           <span class="badge-pulse" aria-hidden="true"></span>
-          Consultoria exclusiva para médicos
+          Disponível para projetos
         </div>
 
-        <h1 class="hero-h1">
-          Crescimento<br>
-          <em class="h1-em">previsível</em><br>
-          para médicos<br>
-          <span class="h1-accent">que já faturam.</span>
+        <h1 class="hero-h1" data-reveal data-reveal-delay="120">
+          <span class="h1-line h1-thin">Gabriel</span>
+          <span class="h1-line h1-bold">Pereira<em class="h1-dot">.</em></span>
         </h1>
 
-        <p class="hero-body">
-          Estruturamos o sistema comercial da sua clínica para gerar um fluxo
-          constante de consultas particulares — com custo de aquisição
-          controlado, funil estruturado e crescimento com método.
+        <p class="hero-role" data-reveal data-reveal-delay="220">
+          Editor de Vídeos &amp; Designer Gráfico
         </p>
 
-        <div class="hero-actions">
-          <a href="#contact" class="btn-primary">
-            <span class="btn-label">Quero estruturar minha clínica</span>
-            <span class="btn-icon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </a>
-          <a href="#method" class="btn-ghost">
-            Ver o Método RG
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <p class="hero-body" data-reveal data-reveal-delay="320">
+          Transformo ideias em imagens que ficam na memória —
+          do roteiro ao corte final.
+        </p>
+
+        <div class="hero-actions" data-reveal data-reveal-delay="420">
+          <a href="#work" class="btn-primary">Ver Trabalhos</a>
+          <a href="#contact" class="btn-ghost">
+            Entrar em contato
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </a>
         </div>
 
-        <div class="hero-metrics" data-reveal-delay="200">
-          <div class="metric">
-            <span class="metric-val">+80</span>
-            <span class="metric-lbl">médicos atendidos</span>
-          </div>
-          <span class="metric-sep" aria-hidden="true"></span>
-          <div class="metric">
-            <span class="metric-val">5</span>
-            <span class="metric-lbl">etapas estruturadas</span>
-          </div>
-          <span class="metric-sep" aria-hidden="true"></span>
-          <div class="metric">
-            <span class="metric-val">100%</span>
-            <span class="metric-lbl">operação remota</span>
-          </div>
-        </div>
-
       </div>
 
-      <!-- Right: founders card -->
-      <div class="hero-visual" data-reveal data-reveal-delay="150">
+      <!-- Right: card -->
+      <div class="hero-visual" data-reveal data-reveal-delay="200" id="heroVisual">
+        <div class="profile-card">
 
-        <div class="founders-card" id="foundersCard">
-
-          <div class="fc-header">
-            <span class="fc-eyebrow">// Fundadores</span>
-            <a href="#about" class="fc-link" aria-label="Sobre nós">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-          </div>
-
-          <!-- Foto dos fundadores preenchendo a box inteira -->
-          <div class="fc-photo-full">
-            <!-- Foto: salve como assets/images/fundadores.jpg -->
-            <img src="assets/images/fundadores.jpg" alt="Gabriel e Rodrigo Pereira" />
-            <!-- Mini-box com os nomes sobreposta na foto -->
-            <div class="fc-names-box">
-              <div class="fc-name-row">
-                <span class="fc-person-name">Gabriel Pereira</span>
-                <span class="fc-person-role">Co-fundador</span>
-              </div>
-              <div class="fc-names-divider"></div>
-              <div class="fc-name-row">
-                <span class="fc-person-name">Rodrigo Pereira</span>
-                <span class="fc-person-role">Co-fundador</span>
-              </div>
+          <div class="pc-top">
+            <span class="pc-label">// Portfolio</span>
+            <div class="pc-status">
+              <span class="pc-status-dot" aria-hidden="true"></span>
+              Disponível
             </div>
           </div>
 
-          <div class="fc-footer">
-            <p class="fc-quote">"Crescimento com método."</p>
-            <span class="fc-location">
-              <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                <path d="M6 1C4.067 1 2.5 2.567 2.5 4.5C2.5 7.25 6 11 6 11C6 11 9.5 7.25 9.5 4.5C9.5 2.567 7.933 1 6 1ZM6 6C5.172 6 4.5 5.328 4.5 4.5C4.5 3.672 5.172 3 6 3C6.828 3 7.5 3.672 7.5 4.5C7.5 5.328 6.828 6 6 6Z" fill="currentColor"/>
-              </svg>
-              Porto Alegre, RS
-            </span>
+          <div class="pc-reel">
+            <div class="pc-grid-pattern" aria-hidden="true"></div>
+            <div class="pc-reel-inner">
+              <button class="pc-play" aria-label="Assistir showreel">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </button>
+              <span class="pc-reel-label">Showreel 2025</span>
+            </div>
+          </div>
+
+          <div class="pc-stats">
+            <div class="pc-stat">
+              <p class="pc-stat-val"><span data-count="50">0</span>+</p>
+              <p class="pc-stat-lbl">projetos</p>
+            </div>
+            <span class="pc-stat-sep" aria-hidden="true"></span>
+            <div class="pc-stat">
+              <p class="pc-stat-val"><span data-count="30">0</span>+</p>
+              <p class="pc-stat-lbl">clientes</p>
+            </div>
+            <span class="pc-stat-sep" aria-hidden="true"></span>
+            <div class="pc-stat">
+              <p class="pc-stat-val"><span data-count="3">0</span></p>
+              <p class="pc-stat-lbl">anos exp.</p>
+            </div>
           </div>
 
         </div>
-
         <div class="visual-glow" aria-hidden="true"></div>
-
       </div>
 
     </div>
 
-    <!-- Trust marquee -->
-    <div class="trust-bar" aria-label="Especialidades atendidas">
-      <span class="trust-label">Especialidades</span>
-      <div class="trust-marquee">
-        <div class="trust-track">
-          <span>Dermatologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Cirurgia Plástica</span><span class="dot" aria-hidden="true">·</span>
-          <span>Oftalmologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Ortopedia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Ginecologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Cardiologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Urologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Endocrinologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Neurologia</span><span class="dot" aria-hidden="true">·</span>
-          <!-- duplicate for seamless loop -->
-          <span>Dermatologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Cirurgia Plástica</span><span class="dot" aria-hidden="true">·</span>
-          <span>Oftalmologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Ortopedia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Ginecologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Cardiologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Urologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Endocrinologia</span><span class="dot" aria-hidden="true">·</span>
-          <span>Neurologia</span><span class="dot" aria-hidden="true">·</span>
-        </div>
+    <!-- Marquee bar -->
+    <div class="marquee-bar" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Reels</span><span class="m-sep">·</span>
+        <span>YouTube</span><span class="m-sep">·</span>
+        <span>Motion Graphics</span><span class="m-sep">·</span>
+        <span>Podcasts</span><span class="m-sep">·</span>
+        <span>Comerciais</span><span class="m-sep">·</span>
+        <span>Design Gráfico</span><span class="m-sep">·</span>
+        <span>Color Grading</span><span class="m-sep">·</span>
+        <span>Storytelling</span><span class="m-sep">·</span>
+        <!-- duplicate for seamless loop -->
+        <span>Reels</span><span class="m-sep">·</span>
+        <span>YouTube</span><span class="m-sep">·</span>
+        <span>Motion Graphics</span><span class="m-sep">·</span>
+        <span>Podcasts</span><span class="m-sep">·</span>
+        <span>Comerciais</span><span class="m-sep">·</span>
+        <span>Design Gráfico</span><span class="m-sep">·</span>
+        <span>Color Grading</span><span class="m-sep">·</span>
+        <span>Storytelling</span><span class="m-sep">·</span>
       </div>
     </div>
 
   </section>
+
+  <!-- ═══════════════════ SERVICES ═══════════════════ -->
+  <section class="section services" id="services">
+    <div class="section-inner">
+
+      <header class="section-header" data-reveal>
+        <span class="section-num">01</span>
+        <h2 class="section-title">O que eu faço</h2>
+      </header>
+
+      <div class="services-list">
+
+        <article class="service-item" data-reveal>
+          <span class="service-num" aria-hidden="true">01</span>
+          <div class="service-body">
+            <h3 class="service-name">Edição de Reels &amp; Shorts</h3>
+            <p class="service-desc">Conteúdo de formato curto otimizado para engajamento máximo em Instagram, TikTok e YouTube Shorts.</p>
+          </div>
+          <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+        <article class="service-item" data-reveal>
+          <span class="service-num" aria-hidden="true">02</span>
+          <div class="service-body">
+            <h3 class="service-name">YouTube &amp; Long-form</h3>
+            <p class="service-desc">Edição completa de vídeos longos — estrutura narrativa, cortes dinâmicos, b-roll e legendas animadas.</p>
+          </div>
+          <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+        <article class="service-item" data-reveal>
+          <span class="service-num" aria-hidden="true">03</span>
+          <div class="service-body">
+            <h3 class="service-name">Motion Graphics &amp; VFX</h3>
+            <p class="service-desc">Animações e efeitos visuais que elevam a qualidade do conteúdo e reforçam a identidade da marca.</p>
+          </div>
+          <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+        <article class="service-item" data-reveal>
+          <span class="service-num" aria-hidden="true">04</span>
+          <div class="service-body">
+            <h3 class="service-name">Design Gráfico</h3>
+            <p class="service-desc">Thumbnails, banners, artes para redes sociais e identidade visual para criadores e marcas digitais.</p>
+          </div>
+          <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+        <article class="service-item" data-reveal>
+          <span class="service-num" aria-hidden="true">05</span>
+          <div class="service-body">
+            <h3 class="service-name">Podcasts em Vídeo</h3>
+            <p class="service-desc">Edição multicâmera, correção de cor, áudio tratado e entrega em múltiplos formatos de tela.</p>
+          </div>
+          <svg class="service-arrow" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ WORK ═══════════════════ -->
+  <section class="section work" id="work">
+    <div class="section-inner">
+
+      <header class="section-header" data-reveal>
+        <span class="section-num">02</span>
+        <h2 class="section-title">Trabalhos Selecionados</h2>
+      </header>
+
+      <div class="work-grid">
+
+        <article class="work-card" data-reveal>
+          <div class="work-thumb work-thumb--1">
+            <div class="work-thumb-overlay">
+              <span class="work-play-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">Reels</span>
+            <h3 class="work-title">Em breve</h3>
+          </div>
+        </article>
+
+        <article class="work-card" data-reveal data-reveal-delay="120">
+          <div class="work-thumb work-thumb--2">
+            <div class="work-thumb-overlay">
+              <span class="work-play-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">YouTube</span>
+            <h3 class="work-title">Em breve</h3>
+          </div>
+        </article>
+
+        <article class="work-card" data-reveal data-reveal-delay="240">
+          <div class="work-thumb work-thumb--3">
+            <div class="work-thumb-overlay">
+              <span class="work-play-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-meta">
+            <span class="work-tag">Motion</span>
+            <h3 class="work-title">Em breve</h3>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ ABOUT ═══════════════════ -->
+  <section class="section about" id="about">
+    <div class="section-inner about-grid">
+
+      <div class="about-left" data-reveal>
+        <span class="section-num">03</span>
+        <h2 class="section-title">Sobre</h2>
+      </div>
+
+      <div class="about-right">
+        <p class="about-text" data-reveal>
+          Sou Gabriel Pereira dos Santos, editor de vídeos e designer gráfico
+          apaixonado por storytelling visual. Trabalho com criadores e marcas
+          que querem conteúdo que comunica com clareza e impacto.
+        </p>
+        <p class="about-text about-text--muted" data-reveal data-reveal-delay="120">
+          Cada projeto começa pela intenção — entender o que precisa ser dito
+          e como chegar lá do jeito mais honesto e bonito possível.
+        </p>
+
+        <div class="tools-block" data-reveal data-reveal-delay="240">
+          <span class="tools-label">Ferramentas</span>
+          <div class="tools-list">
+            <span class="tool-tag">Premiere Pro</span>
+            <span class="tool-tag">After Effects</span>
+            <span class="tool-tag">DaVinci Resolve</span>
+            <span class="tool-tag">Photoshop</span>
+            <span class="tool-tag">Illustrator</span>
+            <span class="tool-tag">Figma</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTACT ═══════════════════ -->
+  <section class="section contact" id="contact">
+    <div class="section-inner">
+
+      <div class="contact-wrap" data-reveal>
+        <span class="section-num">04</span>
+        <h2 class="contact-title">
+          Vamos criar<br>
+          algo <em class="contact-em">juntos?</em>
+        </h2>
+        <p class="contact-sub">Disponível para projetos freelance e colaborações.</p>
+
+        <a href="mailto:gabriel@email.com" class="contact-email">
+          gabriel@email.com
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+
+        <div class="contact-socials">
+          <a href="#" class="social-link">Instagram</a>
+          <span class="s-sep" aria-hidden="true">·</span>
+          <a href="#" class="social-link">LinkedIn</a>
+          <span class="s-sep" aria-hidden="true">·</span>
+          <a href="#" class="social-link">WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-name">Gabriel Pereira dos Santos</span>
+      <span class="footer-copy">© 2025 · Editor de Vídeos &amp; Designer Gráfico</span>
+    </div>
+  </footer>
 
   <script src="assets/js/main.js"></script>
 </body>
