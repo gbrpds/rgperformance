@@ -492,7 +492,7 @@ body.cursor-active::after { opacity: 1; }
 .work-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 28px;
 }
 
 .work-card {
