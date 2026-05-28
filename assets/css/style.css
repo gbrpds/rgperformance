@@ -1349,37 +1349,47 @@ body.page-exit {
 
 
 /* ═══════════════════════════════════════════════════════
-   REEL / VITRINE FILMSTRIP
+   REEL / VITRINE FILMSTRIP  (part of #work section)
    ═══════════════════════════════════════════════════════ */
 
-#reel {
-  position: relative;
-  z-index: 10;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  overflow: hidden;
+/* Reduce #work section-inner bottom padding so the strip
+   feels continuous with the project grid above it */
+#work .section-inner { padding-bottom: 52px; }
+
+/* Arrow nav — sits in the section header, pushed right */
+.reel-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px; /* align with section-title baseline */
 }
 
-#reel::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--border-m), transparent);
-  pointer-events: none;
+.reel-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  flex-shrink: 0;
 }
 
-.reel-header-wrap {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 108px 40px 52px;
+.reel-btn:hover {
+  border-color: var(--border-m);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* The visible window — fades edges left/right */
 .reel-strip-wrap {
   overflow: hidden;
   width: 100%;
-  padding-bottom: 108px;
+  padding-bottom: 100px;
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
@@ -1396,22 +1406,12 @@ body.page-exit {
   );
 }
 
-/* The scrolling track — duplicate items for seamless loop */
+/* The scrolling track — JS-driven via RAF, no CSS animation */
 .reel-strip {
   display: flex;
   gap: 4px;
   width: max-content;
-  animation: reelScroll 48s linear infinite;
-}
-
-/* Pause on hover — whole strip pauses so user can read cards */
-.reel-strip-wrap:hover .reel-strip {
-  animation-play-state: paused;
-}
-
-@keyframes reelScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  will-change: transform;
 }
 
 /* Individual card */
@@ -1538,7 +1538,7 @@ body.page-exit {
       black calc(100% - 40px), transparent 100%
     );
   }
-  .reel-header-wrap { padding: 72px 24px 40px; }
+  .reel-nav { display: none; } /* arrows hidden on touch */
 }
 
 

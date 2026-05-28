@@ -156,6 +156,39 @@ if (backLink) {
 }
 
 
+// ── Reel filmstrip — JS-driven continuous scroll ───────
+(function initReel() {
+  const strip = document.querySelector('.reel-strip');
+  if (!strip) return;
+
+  let pos = 0;
+  const SPEED = 0.55; // px per frame (~33 px/s at 60 fps)
+
+  function halfWidth() {
+    return strip.scrollWidth / 2;
+  }
+
+  (function tick() {
+    pos += SPEED;
+    const hw = halfWidth();
+    if (pos >= hw) pos -= hw;
+    strip.style.transform = `translateX(-${pos}px)`;
+    requestAnimationFrame(tick);
+  })();
+
+  const btnPrev = document.querySelector('.reel-btn--prev');
+  const btnNext = document.querySelector('.reel-btn--next');
+
+  function nudge(delta) {
+    const hw = halfWidth();
+    pos = ((pos + delta) % hw + hw) % hw;
+  }
+
+  if (btnPrev) btnPrev.addEventListener('click', () => nudge(-330));
+  if (btnNext) btnNext.addEventListener('click', () => nudge(330));
+})();
+
+
 // ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
