@@ -944,13 +944,20 @@ a.work-card {
    ═══════════════════════════════════════════════════════ */
 
 /* Entry animation — work pages only */
-.work-page {
-  animation: pageEnter 0.8s var(--ease) both;
+/* Work page entry — dark overlay fades out (cursor stays above at z-index 9999) */
+.work-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9998;
+  pointer-events: none;
+  animation: overlayOut 0.85s var(--ease) forwards;
 }
 
-@keyframes pageEnter {
-  from { opacity: 0; transform: scale(1.015); }
-  to   { opacity: 1; transform: none; }
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 /* Exit animation — all pages */
@@ -1060,6 +1067,65 @@ body.page-exit {
   font-size: 11px;
   font-weight: 500;
   color: var(--muted-lg);
+}
+
+/* ── Floating project info card (bottom-right of hero) ── */
+.wh-info-card {
+  position: absolute;
+  bottom: 56px;
+  right: 56px;
+  width: 300px;
+  background: rgba(8, 8, 8, 0.72);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 2;
+}
+
+.wh-info-card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.wh-info-card-desc {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--muted-lg);
+  line-height: 1.65;
+}
+
+.wh-info-card .pi-row {
+  padding: 9px 0;
+  font-size: 12px;
+}
+
+.wh-info-card .pi-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* ── Highlighted contact button in work-page navbar ── */
+.nav-contact-btn {
+  padding: 5px 14px !important;
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.28);
+  color: var(--accent) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.3s, border-color 0.3s !important;
+}
+.nav-contact-btn:hover {
+  background: rgba(249, 115, 22, 0.16) !important;
+  border-color: rgba(249, 115, 22, 0.5) !important;
+  opacity: 1 !important;
 }
 
 
@@ -1251,8 +1317,8 @@ body.page-exit {
   position: relative;
   aspect-ratio: 9 / 16;
   overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  background: #0a0a0a;
   transition: border-color 0.4s, transform 0.45s var(--ease);
 }
 
@@ -1260,6 +1326,18 @@ body.page-exit {
   border-color: rgba(249, 115, 22, 0.22);
   transform: translateY(-6px);
 }
+
+/* Dark overlay — makes iframe blend with page aesthetic */
+.shorts-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+  transition: opacity 0.35s;
+  z-index: 1;
+}
+.shorts-item:hover::after { opacity: 0; }
 
 .shorts-item iframe {
   position: absolute;

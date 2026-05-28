@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fynde — Gabriel Pereira</title>
-  <meta name="description" content="Projeto Fynde — Ecossistema & Gestão de Investimento Imobiliário." />
+  <meta name="description" content="Projeto Fynde — Ecossistema &amp; Gestão de Investimento Imobiliário." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,7 @@
 </head>
 <body class="work-page">
 
-  <!-- Custom Cursor -->
+  <!-- Custom Cursor — outside any animated wrapper so they always work -->
   <div class="cursor" id="cursor" aria-hidden="true"></div>
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
@@ -29,7 +29,7 @@
         <li class="nav-sep" aria-hidden="true">·</li>
         <li><a href="index.html#services" class="nav-link">Serviços</a></li>
         <li class="nav-sep" aria-hidden="true">·</li>
-        <li><a href="index.html#contact" class="nav-link">Contato</a></li>
+        <li><a href="index.html#contact" class="nav-link nav-contact-btn">Contato</a></li>
       </ul>
       <span class="nav-clock" id="navClock" aria-label="Horário atual">BRT 00:00:00</span>
     </div>
@@ -71,25 +71,33 @@
 
     </div>
 
-    <!-- Marquee bar -->
-    <div class="marquee-bar" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Reels</span><span class="m-sep">·</span>
-        <span>YouTube</span><span class="m-sep">·</span>
-        <span>Motion Graphics</span><span class="m-sep">·</span>
-        <span>Landing Pages</span><span class="m-sep">·</span>
-        <span>Comerciais</span><span class="m-sep">·</span>
-        <span>Design Gráfico</span><span class="m-sep">·</span>
-        <span>Color Grading</span><span class="m-sep">·</span>
-        <span>Storytelling</span><span class="m-sep">·</span>
-        <span>Reels</span><span class="m-sep">·</span>
-        <span>YouTube</span><span class="m-sep">·</span>
-        <span>Motion Graphics</span><span class="m-sep">·</span>
-        <span>Landing Pages</span><span class="m-sep">·</span>
-        <span>Comerciais</span><span class="m-sep">·</span>
-        <span>Design Gráfico</span><span class="m-sep">·</span>
-        <span>Color Grading</span><span class="m-sep">·</span>
-        <span>Storytelling</span><span class="m-sep">·</span>
+    <!-- Floating project info card — bottom right -->
+    <div class="wh-info-card" data-reveal data-reveal-delay="280">
+      <span class="wh-info-card-title">Sobre o Projeto</span>
+      <p class="wh-info-card-desc">
+        Criação de conteúdo em vídeo e motion design para comunicar o ecossistema de
+        gestão e investimento imobiliário da Fynde com clareza e sofisticação.
+      </p>
+      <div style="border-top: 1px solid var(--border); margin: 0 0 4px;"></div>
+      <div class="pi-row">
+        <span class="pi-label">Cliente</span>
+        <span class="pi-val">Fynde</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Nicho</span>
+        <span class="pi-val">Investimento Imobiliário</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Categoria</span>
+        <span class="pi-val">Motion · Design</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Ano</span>
+        <span class="pi-val">2025</span>
+      </div>
+      <div class="pi-row" style="border-bottom: none;">
+        <span class="pi-label">Ferramentas</span>
+        <span class="pi-val">Premiere Pro, After Effects, Photoshop</span>
       </div>
     </div>
 
@@ -97,68 +105,6 @@
 
   <!-- Spacer for fixed hero -->
   <div class="hero-spacer" aria-hidden="true"></div>
-
-  <!-- ═══════════════════ PROJECT MAIN ═══════════════════ -->
-  <section class="section">
-    <div class="section-inner">
-
-      <!-- Hero banner image / video -->
-      <div class="project-banner" data-reveal>
-        <div class="project-banner-inner">
-          <div class="photo-grid" aria-hidden="true"></div>
-          <!-- Replace the div below with <img> or <iframe> when ready -->
-          <div class="project-banner-label">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M10 8.5L15.5 12L10 15.5V8.5Z" fill="currentColor"/>
-            </svg>
-            <span>Vídeo / Thumbnail principal</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Description + Info -->
-      <div class="project-details">
-
-        <div class="project-desc" data-reveal>
-          <h2 class="pd-title">Sobre o Projeto</h2>
-          <p class="pd-body">
-            Descrição detalhada do projeto. Conte o contexto, o objetivo, o processo
-            criativo e o resultado. O que o cliente precisava? Como você resolveu?
-            O que tornou esse projeto especial?
-          </p>
-          <p class="pd-body pd-body--muted">
-            Detalhe técnico, decisão criativa ou resultado relevante pode aparecer
-            aqui como segundo parágrafo.
-          </p>
-        </div>
-
-        <div class="project-info" data-reveal data-reveal-delay="160">
-          <div class="pi-row">
-            <span class="pi-label">Cliente</span>
-            <span class="pi-val">Fynde</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Nicho</span>
-            <span class="pi-val">Investimento Imobiliário</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Categoria</span>
-            <span class="pi-val">Motion · Design</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Ano</span>
-            <span class="pi-val">2025</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Ferramentas</span>
-            <span class="pi-val">Premiere Pro, After Effects, Photoshop</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════════ GALLERY ═══════════════════ -->
   <section class="section">
@@ -246,40 +192,9 @@
 
       <div class="work-grid">
 
-        <a href="work.html" class="work-card" data-reveal>
-          <div class="work-thumb work-thumb--2">
-            <div class="work-thumb-overlay">
-              <span class="work-play-icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
-                </svg>
-              </span>
-            </div>
-          </div>
-          <div class="work-meta">
-            <span class="work-tag">YouTube</span>
-            <h3 class="work-title">Em breve</h3>
-          </div>
-        </a>
-
-        <a href="work.html" class="work-card" data-reveal data-reveal-delay="120">
-          <div class="work-thumb work-thumb--3">
-            <div class="work-thumb-overlay">
-              <span class="work-play-icon" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
-                </svg>
-              </span>
-            </div>
-          </div>
-          <div class="work-meta">
-            <span class="work-tag">Motion</span>
-            <h3 class="work-title">Em breve</h3>
-          </div>
-        </a>
-
-        <a href="work.html" class="work-card" data-reveal data-reveal-delay="240">
+        <a href="work-daniel.html" class="work-card" data-reveal>
           <div class="work-thumb work-thumb--1">
+            <img src="assets/images/thumbs/daniel.png" alt="Daniel Ridieri">
             <div class="work-thumb-overlay">
               <span class="work-play-icon" aria-hidden="true">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -289,8 +204,42 @@
             </div>
           </div>
           <div class="work-meta">
-            <span class="work-tag">Reels</span>
-            <h3 class="work-title">Em breve</h3>
+            <h3 class="work-title">Daniel Ridieri</h3>
+            <p class="work-role">Estrategista Digital</p>
+          </div>
+        </a>
+
+        <a href="work-gaby.html" class="work-card" data-reveal data-reveal-delay="120">
+          <div class="work-thumb work-thumb--2">
+            <img src="assets/images/thumbs/gaby.jpg" alt="Gabrielly Lehmkuhl">
+            <div class="work-thumb-overlay">
+              <span class="work-play-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-meta">
+            <h3 class="work-title">Gabrielly Lehmkuhl</h3>
+            <p class="work-role">Mentora de Clínicas Médicas &amp; Odontológicas</p>
+          </div>
+        </a>
+
+        <a href="work-rafaela.html" class="work-card" data-reveal data-reveal-delay="240">
+          <div class="work-thumb work-thumb--3">
+            <img src="assets/images/thumbs/rafaela.jpg" alt="Dra. Rafaela Lehmkuhl">
+            <div class="work-thumb-overlay">
+              <span class="work-play-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-meta">
+            <h3 class="work-title">Dra. Rafaela Lehmkuhl</h3>
+            <p class="work-role">Médica Dermatologista</p>
           </div>
         </a>
 

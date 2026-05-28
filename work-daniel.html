@@ -14,7 +14,7 @@
 </head>
 <body class="work-page">
 
-  <!-- Custom Cursor -->
+  <!-- Custom Cursor — outside any animated wrapper so they always work -->
   <div class="cursor" id="cursor" aria-hidden="true"></div>
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
@@ -29,7 +29,7 @@
         <li class="nav-sep" aria-hidden="true">·</li>
         <li><a href="index.html#services" class="nav-link">Serviços</a></li>
         <li class="nav-sep" aria-hidden="true">·</li>
-        <li><a href="index.html#contact" class="nav-link">Contato</a></li>
+        <li><a href="index.html#contact" class="nav-link nav-contact-btn">Contato</a></li>
       </ul>
       <span class="nav-clock" id="navClock" aria-label="Horário atual">BRT 00:00:00</span>
     </div>
@@ -71,57 +71,40 @@
 
     </div>
 
+    <!-- Floating project info card — bottom right -->
+    <div class="wh-info-card" data-reveal data-reveal-delay="280">
+      <span class="wh-info-card-title">Sobre o Projeto</span>
+      <p class="wh-info-card-desc">
+        Produção de conteúdo estratégico para redes sociais com foco em
+        posicionamento, conversão e presença digital de autoridade.
+      </p>
+      <div style="border-top: 1px solid var(--border); margin: 0 0 4px;"></div>
+      <div class="pi-row">
+        <span class="pi-label">Cliente</span>
+        <span class="pi-val">Daniel Ridieri</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Nicho</span>
+        <span class="pi-val">Marketing &amp; Estratégia Digital</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Categoria</span>
+        <span class="pi-val">Reels · Design</span>
+      </div>
+      <div class="pi-row">
+        <span class="pi-label">Ano</span>
+        <span class="pi-val">2025</span>
+      </div>
+      <div class="pi-row" style="border-bottom: none;">
+        <span class="pi-label">Ferramentas</span>
+        <span class="pi-val">Premiere Pro, After Effects, Photoshop</span>
+      </div>
+    </div>
+
   </section>
 
   <!-- Spacer for fixed hero -->
   <div class="hero-spacer" aria-hidden="true"></div>
-
-  <!-- ═══════════════════ PROJECT MAIN ═══════════════════ -->
-  <section class="section">
-    <div class="section-inner">
-
-      <!-- Description + Info -->
-      <div class="project-details">
-
-        <div class="project-desc" data-reveal>
-          <h2 class="pd-title">Sobre o Projeto</h2>
-          <p class="pd-body">
-            Descrição detalhada do projeto. Conte o contexto, o objetivo, o processo
-            criativo e o resultado. O que o cliente precisava? Como você resolveu?
-            O que tornou esse projeto especial?
-          </p>
-          <p class="pd-body pd-body--muted">
-            Detalhe técnico, decisão criativa ou resultado relevante pode aparecer
-            aqui como segundo parágrafo.
-          </p>
-        </div>
-
-        <div class="project-info" data-reveal data-reveal-delay="160">
-          <div class="pi-row">
-            <span class="pi-label">Cliente</span>
-            <span class="pi-val">Daniel Ridieri</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Nicho</span>
-            <span class="pi-val">Marketing &amp; Estratégia Digital</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Categoria</span>
-            <span class="pi-val">Reels · Design</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Ano</span>
-            <span class="pi-val">2025</span>
-          </div>
-          <div class="pi-row">
-            <span class="pi-label">Ferramentas</span>
-            <span class="pi-val">Premiere Pro, After Effects, Photoshop</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════════ GALLERY — SHORTS ═══════════════════ -->
   <section class="section">
@@ -136,7 +119,7 @@
 
         <div class="shorts-item" data-reveal>
           <iframe
-            src="https://www.youtube.com/embed/9b5aZB7YwWA"
+            src="https://www.youtube-nocookie.com/embed/9b5aZB7YwWA?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 1"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -145,7 +128,7 @@
 
         <div class="shorts-item" data-reveal data-reveal-delay="80">
           <iframe
-            src="https://www.youtube.com/embed/K3YK-5rfhPc"
+            src="https://www.youtube-nocookie.com/embed/K3YK-5rfhPc?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 2"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -154,7 +137,7 @@
 
         <div class="shorts-item" data-reveal data-reveal-delay="160">
           <iframe
-            src="https://www.youtube.com/embed/XbhVYORjSBk"
+            src="https://www.youtube-nocookie.com/embed/XbhVYORjSBk?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 3"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -163,7 +146,7 @@
 
         <div class="shorts-item" data-reveal data-reveal-delay="80">
           <iframe
-            src="https://www.youtube.com/embed/JVMIz4SfWy0"
+            src="https://www.youtube-nocookie.com/embed/JVMIz4SfWy0?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 4"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -172,7 +155,7 @@
 
         <div class="shorts-item" data-reveal data-reveal-delay="160">
           <iframe
-            src="https://www.youtube.com/embed/8-MRs-Gk11E"
+            src="https://www.youtube-nocookie.com/embed/8-MRs-Gk11E?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 5"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -181,7 +164,7 @@
 
         <div class="shorts-item" data-reveal data-reveal-delay="240">
           <iframe
-            src="https://www.youtube.com/embed/HialgpAWCY8"
+            src="https://www.youtube-nocookie.com/embed/HialgpAWCY8?rel=0&modestbranding=1&color=white"
             title="Daniel Ridieri — Reels 6"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
