@@ -1349,6 +1349,200 @@ body.page-exit {
 
 
 /* ═══════════════════════════════════════════════════════
+   REEL / VITRINE FILMSTRIP
+   ═══════════════════════════════════════════════════════ */
+
+#reel {
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+}
+
+#reel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-m), transparent);
+  pointer-events: none;
+}
+
+.reel-header-wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 108px 40px 52px;
+}
+
+/* The visible window — fades edges left/right */
+.reel-strip-wrap {
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 108px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 100px,
+    black calc(100% - 100px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 100px,
+    black calc(100% - 100px),
+    transparent 100%
+  );
+}
+
+/* The scrolling track — duplicate items for seamless loop */
+.reel-strip {
+  display: flex;
+  gap: 4px;
+  width: max-content;
+  animation: reelScroll 48s linear infinite;
+}
+
+/* Pause on hover — whole strip pauses so user can read cards */
+.reel-strip-wrap:hover .reel-strip {
+  animation-play-state: paused;
+}
+
+@keyframes reelScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Individual card */
+.reel-item {
+  flex-shrink: 0;
+  height: 66vh;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Placeholder background for items without a real image */
+.reel-item--ph {
+  background: #0d0d0d;
+}
+
+.reel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.75s var(--ease), filter 0.45s;
+  filter: brightness(0.82) saturate(0.85);
+}
+
+/* Permanent bottom-fade on each card */
+.reel-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.10) 44%,
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+/* Text overlay — hidden, slides up on hover */
+.reel-item-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 18px 15px;
+  opacity: 0;
+  transition: opacity 0.32s;
+  pointer-events: none;
+}
+
+.reel-item:hover .reel-item-overlay { opacity: 1; }
+
+.reel-item:hover img {
+  transform: scale(1.06);
+  filter: brightness(0.62) saturate(1.1);
+}
+
+.reel-item-tag {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.reel-item-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+/* Circular play icon — scales in on hover */
+.reel-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.78);
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.82);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.35s var(--ease);
+  pointer-events: none;
+}
+
+.reel-item:hover .reel-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Placeholder icon for items without real images */
+.reel-item--ph .reel-ph-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 768px) {
+  .reel-item { height: 52vh; }
+  .reel-strip-wrap {
+    -webkit-mask-image: linear-gradient(
+      to right, transparent 0%, black 40px,
+      black calc(100% - 40px), transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right, transparent 0%, black 40px,
+      black calc(100% - 40px), transparent 100%
+    );
+  }
+  .reel-header-wrap { padding: 72px 24px 40px; }
+}
+
+
+/* ═══════════════════════════════════════════════════════
    REVEAL ANIMATIONS
    ═══════════════════════════════════════════════════════ */
 
