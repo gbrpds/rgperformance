@@ -989,10 +989,9 @@ body.page-exit {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: calc(var(--nav-h) + 32px) 40px 56px;
-  max-width: var(--max-w);
+  padding: calc(var(--nav-h) + 32px) 72px 56px;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
   gap: 20px;
 }
 
@@ -1000,7 +999,7 @@ body.page-exit {
 .back-link {
   position: absolute;
   top: calc(var(--nav-h) + 28px);
-  left: 40px;
+  left: 72px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1073,7 +1072,7 @@ body.page-exit {
 .wh-info-card {
   position: absolute;
   bottom: 56px;
-  right: 56px;
+  right: 72px;
   width: 300px;
   background: rgba(8, 8, 8, 0.72);
   border: 1px solid var(--border);
@@ -1139,22 +1138,25 @@ body.page-exit {
   margin-bottom: 64px;
 }
 
-/* Full-bleed banner image — sits between hero-spacer and gallery */
-.project-banner-full {
-  position: relative;
-  z-index: 10;
+/* Banner image inside the hero — atmospheric backdrop */
+.wh-banner {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  background: var(--bg);
-  overflow: hidden;
-  max-height: 80vh;
-}
-
-.project-banner-full img {
-  width: 100%;
-  max-height: 80vh;
+  height: 100%;
   object-fit: cover;
   object-position: center top;
-  display: block;
+  z-index: 0;
+  opacity: 0.28;
+  /* Darken towards bottom and left so text stays legible */
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 40%, rgba(0,0,0,0.2) 100%),
+    linear-gradient(to right, rgba(0,0,0,0.55) 0%, black 45%);
+  mask-image:
+    linear-gradient(to bottom, black 40%, rgba(0,0,0,0.2) 100%),
+    linear-gradient(to right, rgba(0,0,0,0.55) 0%, black 45%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
 }
 
 .project-banner-inner {
