@@ -1139,6 +1139,24 @@ body.page-exit {
   margin-bottom: 64px;
 }
 
+/* Full-bleed banner image — sits between hero-spacer and gallery */
+.project-banner-full {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  max-height: 80vh;
+}
+
+.project-banner-full img {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
 .project-banner-inner {
   position: relative;
   width: 100%;
