@@ -189,6 +189,46 @@ if (backLink) {
 })();
 
 
+// ── Instagram-like Carousel ────────────────────────────
+(function initCarousels() {
+  document.querySelectorAll('.carousel').forEach(function (carousel) {
+    const track   = carousel.querySelector('.carousel-track');
+    const slides  = Array.from(carousel.querySelectorAll('.carousel-slide'));
+    const dots    = Array.from(carousel.querySelectorAll('.carousel-dot'));
+    const counter = carousel.querySelector('.carousel-counter');
+    const total   = slides.length;
+    let current   = 0;
+
+    function activateVideo(slide) {
+      const iframe = slide.querySelector('iframe[data-src]');
+      if (iframe) { iframe.src = iframe.dataset.src; iframe.removeAttribute('data-src'); }
+    }
+    function deactivateVideo(slide) {
+      const iframe = slide.querySelector('iframe');
+      if (iframe && iframe.src) { iframe.dataset.src = iframe.src; iframe.src = ''; }
+    }
+
+    function goTo(idx) {
+      deactivateVideo(slides[current]);
+      current = (idx + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      if (counter) counter.textContent = `${current + 1} / ${total}`;
+      activateVideo(slides[current]);
+    }
+
+    carousel.querySelector('.carousel-btn--prev').addEventListener('click', function (e) { e.stopPropagation(); goTo(current - 1); });
+    carousel.querySelector('.carousel-btn--next').addEventListener('click', function (e) { e.stopPropagation(); goTo(current + 1); });
+    dots.forEach(function (dot, i) { dot.addEventListener('click', function () { goTo(i); }); });
+
+    // Touch / pointer drag
+    let startX = 0, isDragging = false;
+    track.addEventListener('pointerdown', function (e) { startX = e.clientX; isDragging = true; carousel.classList.add('is-dragging'); track.setPointerCapture(e.pointerId); });
+    track.addEventListener('pointerup',   function (e) { if (!isDragging) return; isDragging = false; carousel.classList.remove('is-dragging'); const diff = e.clientX - startX; if (Math.abs(diff) > 40) goTo(diff < 0 ? current + 1 : current - 1); });
+    track.addEventListener('pointermove', function (e) { /* captured — no default scroll interference */ });
+  });
+})();
+
 // ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
