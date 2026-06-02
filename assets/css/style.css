@@ -1029,6 +1029,17 @@ body.cursor-active::after { opacity: 1; }
   color: var(--text);
 }
 
+/* Mobile-only nav CTA — hidden on desktop */
+.nav-cta-m { display: none; }
+
+/* Work "load more" button area */
+.work-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.work-card--hidden { display: none; }
+
 /* work-card as <a> element */
 a.work-card {
   text-decoration: none;
@@ -1913,15 +1924,47 @@ body.page-exit {
 }
 
 @media (max-width: 640px) {
-  .nav-inner { padding: 0 24px; grid-template-columns: 1fr auto; }
+  /* ── Navbar: logo | Contato-btn | BRT ── */
+  .nav-inner { padding: 0 20px; grid-template-columns: auto 1fr auto; gap: 12px; }
   .nav-links { display: none; }
+  .nav-cta-m {
+    display: inline-flex;
+    justify-self: center;
+    font-size: 11px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
   .nav-clock { justify-self: end; }
+
+  /* ── Sections ── */
   .section-inner { padding: 80px 24px; }
   .footer-inner { padding: 0 24px; }
-  .work-grid { grid-template-columns: 1fr; }
+
+  /* ── Work grid: 2 columns ── */
+  .work-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .work-title { font-size: 13px; }
+  .work-role  { font-size: 11px; }
+
+  /* ── Hero actions ── */
   .hero-actions { flex-direction: column; align-items: center; width: 100%; }
   .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+
+  /* ── No custom cursor on touch ── */
   body { cursor: auto; }
   .cursor, .cursor-dot { display: none; }
   body::after { display: none; }
+
+  /* ── About: photo on top, text below ── */
+  .about-photo-col { order: -1; }
+  .photo-placeholder { min-height: 300px; }
+  .about-photo { object-position: center 25%; }
+
+  /* ── Work pages: shorts 2-col ── */
+  .shorts-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── Work pages: back link mobile position ── */
+  .back-link { left: 24px; }
+
+  /* ── Work-more button: full width ── */
+  .work-load-more { width: 100%; }
 }

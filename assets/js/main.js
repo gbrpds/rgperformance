@@ -94,7 +94,10 @@ function updateHero() {
   rafHero = false;
 }
 
+let heroSynced = false;
 window.addEventListener('scroll', () => {
+  // First scroll: run synchronously so hero blur is applied before first paint
+  if (!heroSynced) { heroSynced = true; updateHero(); }
   if (!rafHero) {
     rafHero = true;
     requestAnimationFrame(updateHero);
@@ -268,6 +271,30 @@ if (backLink) {
   closeBtn.addEventListener('click', closeModal);
   backdrop.addEventListener('click', closeModal);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
+
+
+// ── Work grid "ver mais" — shows hidden cards above LIMIT ─────
+(function initWorkMore() {
+  const grid = document.querySelector('.work-grid');
+  const wrap = document.getElementById('workMoreWrap');
+  const btn  = document.getElementById('workLoadMore');
+  if (!grid || !wrap || !btn) return;
+
+  const LIMIT = 6;
+  const cards = Array.from(grid.querySelectorAll('.work-card'));
+
+  if (cards.length <= LIMIT) {
+    wrap.style.display = 'none';
+    return;
+  }
+
+  cards.slice(LIMIT).forEach(c => c.classList.add('work-card--hidden'));
+
+  btn.addEventListener('click', () => {
+    grid.querySelectorAll('.work-card--hidden').forEach(c => c.classList.remove('work-card--hidden'));
+    wrap.style.display = 'none';
+  });
 })();
 
 
