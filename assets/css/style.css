@@ -2014,8 +2014,9 @@ body.page-exit {
 
   /* ── Work page hero — mobile layout ── */
   .wh-content {
-    padding: calc(var(--nav-h) + 16px) 24px 32px;
+    padding: calc(var(--nav-h) + 20px) 24px 80px;
     gap: 14px;
+    justify-content: center;   /* text stays mid-screen, not buried at bottom */
   }
   .wh-title { white-space: normal; font-size: clamp(26px, 9vw, 46px); }
   .wh-tagline { font-size: 13px; max-width: 100%; }
@@ -2025,4 +2026,15 @@ body.page-exit {
   .work-back-sticky { left: 16px; }
   /* Gallery CTA full-width on mobile */
   .gallery-cta .btn-outline { width: 100%; justify-content: center; }
+
+  /* ── Work pages mobile nav: Logo | Contato (right), no BRT ── */
+  .work-page .nav-inner { grid-template-columns: 1fr auto; }
+  .work-page .nav-clock { display: none; }
+  .work-page .nav-cta-m {
+    display: inline-flex;
+    justify-self: end;
+    font-size: 11px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
 }

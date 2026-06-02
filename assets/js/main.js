@@ -180,6 +180,27 @@ if (backLink) {
   if (viewport) {
     viewport.addEventListener('mouseenter', () => { paused = true; });
     viewport.addEventListener('mouseleave', () => { paused = false; });
+
+    // Touch drag — lets mobile users swipe the filmstrip
+    let touchStartX = 0;
+    let touchStartPos = 0;
+
+    viewport.addEventListener('touchstart', e => {
+      touchStartX   = e.touches[0].clientX;
+      touchStartPos = pos;
+      paused = true;
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', e => {
+      const delta = touchStartX - e.touches[0].clientX;
+      const hw = halfWidth();
+      pos = ((touchStartPos + delta) % hw + hw) % hw;
+      strip.style.transform = `translateX(-${pos}px)`;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', () => {
+      paused = false;
+    }, { passive: true });
   }
 
   const btnPrev = document.querySelector('.reel-btn--prev');
