@@ -1528,6 +1528,20 @@ body.page-exit {
 
 .carousel.is-dragging .carousel-track { transition: none; }
 
+/* Static single-image card (same 4:5 cell, no JS) */
+.static-card {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.static-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 
 /* ═══════════════════════════════════════════════════════
    REEL / VITRINE FILMSTRIP  (part of #work section)
