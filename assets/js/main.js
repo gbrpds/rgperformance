@@ -239,6 +239,38 @@ if (backLink) {
   });
 })();
 
+// ── Reel video modal ──────────────────────────────────
+(function initReelModal() {
+  const modal    = document.getElementById('reelModal');
+  const iframe   = document.getElementById('reelModalIframe');
+  const closeBtn = document.getElementById('reelModalClose');
+  const backdrop = document.getElementById('reelModalBackdrop');
+  if (!modal) return;
+
+  function openModal(videoId) {
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1&color=white';
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.reel-item[data-video-id]').forEach(function (item) {
+    item.addEventListener('click', function () { openModal(item.dataset.videoId); });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
+
+
 // ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
