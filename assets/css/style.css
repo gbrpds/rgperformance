@@ -1032,6 +1032,50 @@ body.cursor-active::after { opacity: 1; }
 /* Mobile-only nav CTA — hidden on desktop */
 .nav-cta-m { display: none; }
 
+/* ── Sticky back button (work pages) ── */
+.work-back-sticky {
+  position: fixed;
+  top: calc(var(--nav-h) + 14px);
+  left: 32px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(8, 8, 8, 0.88);
+  border: 1px solid var(--border-m);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted-lg);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-10px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), color 0.3s;
+}
+.work-back-sticky.is-visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+.work-back-sticky:hover { color: var(--text); }
+.work-back-sticky svg { flex-shrink: 0; transition: transform 0.3s var(--ease); }
+.work-back-sticky:hover svg { transform: translateX(-3px); }
+
+/* ── Gallery end CTA ── */
+.gallery-cta {
+  display: flex;
+  justify-content: center;
+  padding-top: 56px;
+  margin-top: 56px;
+  border-top: 1px solid var(--border);
+}
+
 /* Work "load more" button area */
 .work-more {
   display: flex;
@@ -1967,4 +2011,18 @@ body.page-exit {
 
   /* ── Work-more button: full width ── */
   .work-load-more { width: 100%; }
+
+  /* ── Work page hero — mobile layout ── */
+  .wh-content {
+    padding: calc(var(--nav-h) + 16px) 24px 32px;
+    gap: 14px;
+  }
+  .wh-title { white-space: normal; font-size: clamp(26px, 9vw, 46px); }
+  .wh-tagline { font-size: 13px; max-width: 100%; }
+  /* Hide floating info card — overlaps content on mobile */
+  .wh-info-card { display: none; }
+  /* Sticky back button closer to edge */
+  .work-back-sticky { left: 16px; }
+  /* Gallery CTA full-width on mobile */
+  .gallery-cta .btn-outline { width: 100%; justify-content: center; }
 }

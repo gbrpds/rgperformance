@@ -71,15 +71,15 @@ window.addEventListener('scroll', () => {
 // ── Hero blur + scale on scroll ────────────────────────
 // The hero is position:fixed; sections slide over it.
 // As user scrolls, the hero content blurs and scales down.
+// Uses a continuous RAF loop so iOS momentum scrolling works too.
 const heroEl = document.querySelector('.hero');
-let rafHero  = false;
 
 function updateHero() {
   const scrollY = window.scrollY;
   const vph     = window.innerHeight;
 
-  // Blur starts at 20% of viewport, fully blurred at 80%
-  const progress = Math.max(0, Math.min(1, (scrollY - vph * 0.18) / (vph * 0.6)));
+  // progress 0→1 as scrollY goes 0→100vh (full viewport height)
+  const progress = Math.max(0, Math.min(1, scrollY / vph));
 
   if (progress === 0) {
     heroEl.style.filter    = '';
@@ -90,19 +90,13 @@ function updateHero() {
     heroEl.style.transform = `scale(${1 - progress * 0.055})`;
     heroEl.style.opacity   = `${1 - progress * 0.45}`;
   }
-
-  rafHero = false;
 }
 
-let heroSynced = false;
-window.addEventListener('scroll', () => {
-  // First scroll: run synchronously so hero blur is applied before first paint
-  if (!heroSynced) { heroSynced = true; updateHero(); }
-  if (!rafHero) {
-    rafHero = true;
-    requestAnimationFrame(updateHero);
-  }
-}, { passive: true });
+// Continuous RAF loop — runs every frame, works during iOS momentum scroll
+(function heroLoop() {
+  updateHero();
+  requestAnimationFrame(heroLoop);
+})();
 
 
 // ── Scroll reveal (IntersectionObserver) ───────────────
@@ -295,6 +289,44 @@ if (backLink) {
     grid.querySelectorAll('.work-card--hidden').forEach(c => c.classList.remove('work-card--hidden'));
     wrap.style.display = 'none';
   });
+})();
+
+
+// ── Work pages: "Mais Projetos" ver-mais button ────────
+(function initMoreProjects() {
+  const wrap = document.getElementById('moreProjectsWrap');
+  const btn  = document.getElementById('moreProjectsBtn');
+  if (!wrap || !btn) return;
+
+  const grid = wrap.previousElementSibling;
+  if (!grid) return;
+
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const LIMIT    = isMobile ? 4 : 3;
+  const cards    = Array.from(grid.querySelectorAll('.work-card'));
+
+  if (cards.length <= LIMIT) { wrap.style.display = 'none'; return; }
+
+  cards.slice(LIMIT).forEach(c => c.classList.add('work-card--hidden'));
+
+  btn.addEventListener('click', () => {
+    grid.querySelectorAll('.work-card--hidden').forEach(c => c.classList.remove('work-card--hidden'));
+    wrap.style.display = 'none';
+  });
+})();
+
+
+// ── Sticky back button on work pages ─────────────────
+(function initStickyBack() {
+  const btn     = document.getElementById('stickyBack');
+  const spacer  = document.querySelector('.hero-spacer');
+  if (!btn || !spacer) return;
+
+  const obs = new IntersectionObserver(entries => {
+    btn.classList.toggle('is-visible', !entries[0].isIntersecting);
+  }, { threshold: 0 });
+
+  obs.observe(spacer);
 })();
 
 
