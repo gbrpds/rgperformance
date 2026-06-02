@@ -1552,32 +1552,52 @@ body.page-exit {
 #work .section-inner { padding-bottom: 52px; }
 
 /* Arrow nav — sits in the section header, pushed right */
+/* Viewport wrapper — hosts the overlay nav */
+.reel-viewport {
+  position: relative;
+}
+
 .reel-nav {
-  margin-left: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 66vh;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-bottom: 4px; /* align with section-title baseline */
+  justify-content: space-between;
+  padding: 0 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+.reel-viewport:hover .reel-nav {
+  opacity: 1;
 }
 
 .reel-btn {
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(8, 8, 8, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.3s, color 0.3s, background 0.3s;
+  transition: border-color 0.25s, color 0.25s, background 0.25s;
   flex-shrink: 0;
+  pointer-events: all;
 }
 
 .reel-btn:hover {
-  border-color: var(--border-m);
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(249, 115, 22, 0.45);
+  color: var(--accent);
+  background: rgba(249, 115, 22, 0.12);
 }
 
 /* The visible window — fades edges left/right */

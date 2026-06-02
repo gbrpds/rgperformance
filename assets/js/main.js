@@ -162,6 +162,7 @@ if (backLink) {
   if (!strip) return;
 
   let pos = 0;
+  let paused = false;
   const SPEED = 0.55; // px per frame (~33 px/s at 60 fps)
 
   function halfWidth() {
@@ -169,12 +170,20 @@ if (backLink) {
   }
 
   (function tick() {
-    pos += SPEED;
-    const hw = halfWidth();
-    if (pos >= hw) pos -= hw;
-    strip.style.transform = `translateX(-${pos}px)`;
+    if (!paused) {
+      pos += SPEED;
+      const hw = halfWidth();
+      if (pos >= hw) pos -= hw;
+      strip.style.transform = `translateX(-${pos}px)`;
+    }
     requestAnimationFrame(tick);
   })();
+
+  const viewport = document.querySelector('.reel-viewport');
+  if (viewport) {
+    viewport.addEventListener('mouseenter', () => { paused = true; });
+    viewport.addEventListener('mouseleave', () => { paused = false; });
+  }
 
   const btnPrev = document.querySelector('.reel-btn--prev');
   const btnNext = document.querySelector('.reel-btn--next');
@@ -182,6 +191,7 @@ if (backLink) {
   function nudge(delta) {
     const hw = halfWidth();
     pos = ((pos + delta) % hw + hw) % hw;
+    strip.style.transform = `translateX(-${pos}px)`;
   }
 
   if (btnPrev) btnPrev.addEventListener('click', () => nudge(-330));
