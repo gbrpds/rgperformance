@@ -68,23 +68,23 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 
-// ── Hero blur + scale on scroll ────────────────────────
-// The hero is position:fixed; sections slide over it.
-// As user scrolls, the hero content blurs and scales down.
-// Uses a continuous RAF loop so iOS momentum scrolling works too.
-const heroEl = document.querySelector('.hero');
+// ── Hero scroll effect ─────────────────────────────────
+// Desktop: blur + scale + fade. Mobile/touch: opacity-only —
+// applying filter to position:fixed causes iOS rendering glitches.
+const heroEl     = document.querySelector('.hero');
+const isTouch    = window.matchMedia('(pointer: coarse)').matches;
 
 function updateHero() {
-  const scrollY = window.scrollY;
-  const vph     = window.innerHeight;
-
-  // progress 0→1 as scrollY goes 0→100vh (full viewport height)
+  const scrollY  = window.scrollY;
+  const vph      = window.innerHeight;
   const progress = Math.max(0, Math.min(1, scrollY / vph));
 
   if (progress === 0) {
     heroEl.style.filter    = '';
     heroEl.style.transform = '';
     heroEl.style.opacity   = '';
+  } else if (isTouch) {
+    heroEl.style.opacity   = `${1 - progress * 0.75}`;
   } else {
     heroEl.style.filter    = `blur(${progress * 22}px)`;
     heroEl.style.transform = `scale(${1 - progress * 0.055})`;
@@ -92,9 +92,11 @@ function updateHero() {
   }
 }
 
-// Continuous RAF loop — runs every frame, works during iOS momentum scroll
+// RAF loop — throttled: only runs updateHero when scrollY actually changed
+let _lastScrollY = -1;
 (function heroLoop() {
-  updateHero();
+  const sy = window.scrollY;
+  if (sy !== _lastScrollY) { _lastScrollY = sy; updateHero(); }
   requestAnimationFrame(heroLoop);
 })();
 

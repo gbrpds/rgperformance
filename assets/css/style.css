@@ -204,7 +204,7 @@ body.cursor-active::after { opacity: 1; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  will-change: filter, transform;
+  will-change: transform;
 }
 
 /* Spacer that creates document scroll space for the fixed hero */
@@ -2041,4 +2041,14 @@ body.page-exit {
     padding: 6px 10px;
     gap: 6px;
   }
+}
+
+/* ── Touch / mobile performance — reduce GPU layer pressure ── */
+@media (pointer: coarse) {
+  /* Hero: only opacity animates on mobile, no filter or transform */
+  .hero { will-change: opacity; }
+  /* Glow orbs: blur(90px) + continuous animation = heavy GPU cost on mobile */
+  .glow-orb { display: none; }
+  /* Noise overlay: SVG filter is extra paint work on mobile */
+  .noise { display: none; }
 }
