@@ -2014,10 +2014,11 @@ body.page-exit {
 
   /* ── Work page hero — mobile layout ── */
   .wh-content {
-    /* max(128px, safe-area+96px) lifts content above iOS browser chrome */
-    padding: calc(var(--nav-h) + 16px) 24px max(128px, calc(env(safe-area-inset-bottom, 0px) + 96px));
+    /* With 100svh the hero matches the truly visible area, so a moderate
+       padding-bottom places text in the lower-centre of the screen. */
+    padding: calc(var(--nav-h) + 16px) 24px max(80px, calc(env(safe-area-inset-bottom, 0px) + 56px));
     gap: 8px;
-    justify-content: flex-end;   /* text in lower third, below the face */
+    justify-content: flex-end;
   }
   .wh-title { white-space: normal; font-size: clamp(22px, 7.5vw, 40px); }
   .wh-category { font-size: 10px; }
@@ -2051,4 +2052,10 @@ body.page-exit {
   .glow-orb { display: none; }
   /* Noise overlay: SVG filter is extra paint work on mobile */
   .noise { display: none; }
+
+  /* svh (small viewport height) = visible area with browser chrome showing.
+     100vh on iOS Safari includes the hidden chrome area, pushing content
+     behind the address bar / bottom toolbar. */
+  .hero       { height: 100svh; }
+  .hero-spacer { height: 100svh; }
 }
