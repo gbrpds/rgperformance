@@ -20,9 +20,10 @@
   --border:       rgba(0, 230, 112, 0.14);
   --border-sub:   rgba(255, 255, 255, 0.07);
 
-  --font-title:    'Sora', sans-serif;
-  --font-body:     'Manrope', sans-serif;
-  --font-editorial:'Playfair Display', serif;
+  /* Fonts — injetadas pelo next/font/google via variáveis CSS */
+  --font-title:    var(--font-sora), sans-serif;
+  --font-body:     var(--font-manrope), sans-serif;
+  --font-editorial:var(--font-playfair), serif;
 
   --nav-h: 72px;
   --ease:  cubic-bezier(0.22, 1, 0.36, 1);
@@ -79,7 +80,6 @@ body {
   gap: 32px;
 }
 
-/* Logo — imagem recortada para mostrar só o logo */
 .nav-logo {
   text-decoration: none;
   flex-shrink: 0;
@@ -99,7 +99,6 @@ body {
   display: block;
 }
 
-/* Nav pill */
 .nav-pill {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-sub);
@@ -132,7 +131,6 @@ body {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* Nav CTA */
 .nav-cta {
   display: flex;
   align-items: center;
@@ -155,13 +153,8 @@ body {
   transform: translateY(-1px);
 }
 
-.nav-cta svg {
-  transition: transform 0.25s var(--ease);
-}
-
-.nav-cta:hover svg {
-  transform: translateX(3px);
-}
+.nav-cta svg { transition: transform 0.25s var(--ease); }
+.nav-cta:hover svg { transform: translateX(3px); }
 
 
 /* ═══════════════════════════════════════════════════════
@@ -176,7 +169,6 @@ body {
   overflow: hidden;
 }
 
-/* ── Background ── */
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -193,12 +185,6 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-/* Fallback caso a imagem não carregue */
-.hero-img:not(:has(img[src])),
-.hero-img img[src="assets/images/clinica.jpg"]:not([complete]) {
-  background: radial-gradient(ellipse 80% 80% at 70% 50%, #0C231F 0%, #071410 40%, var(--bg) 75%);
 }
 
 .hero-overlay {
@@ -245,7 +231,6 @@ body {
   background-size: 200px 200px;
 }
 
-/* ── Main grid — alinhado à esquerda ── */
 .hero-container {
   position: relative;
   z-index: 1;
@@ -258,7 +243,6 @@ body {
   align-items: center;
 }
 
-/* ── Copy ── */
 .hero-copy {
   display: flex;
   flex-direction: column;
@@ -295,7 +279,6 @@ body {
   50%       { box-shadow: 0 0 0 5px rgba(0, 230, 112, 0); }
 }
 
-/* Headline: peso fino na base, bold só no destaque — igual à referência */
 .hero-h1 {
   font-family: var(--font-title);
   font-weight: 300;
@@ -327,7 +310,6 @@ body {
   max-width: 460px;
 }
 
-/* ── Buttons ── */
 .hero-actions {
   display: flex;
   align-items: center;
@@ -338,7 +320,6 @@ body {
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0;
   background: var(--bg);
   border: 1px solid rgba(0, 230, 112, 0.35);
   border-radius: 12px;
@@ -363,9 +344,7 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-primary:hover::before {
-  opacity: 1;
-}
+.btn-primary:hover::before { opacity: 1; }
 
 .btn-label {
   padding: 15px 24px;
@@ -393,17 +372,9 @@ body {
   transition: background 0.3s;
 }
 
-.btn-primary:hover .btn-icon {
-  background: rgba(0, 230, 112, 0.2);
-}
-
-.btn-icon svg {
-  transition: transform 0.25s var(--ease);
-}
-
-.btn-primary:hover .btn-icon svg {
-  transform: translateX(3px);
-}
+.btn-primary:hover .btn-icon { background: rgba(0, 230, 112, 0.2); }
+.btn-icon svg { transition: transform 0.25s var(--ease); }
+.btn-primary:hover .btn-icon svg { transform: translateX(3px); }
 
 .btn-ghost {
   display: inline-flex;
@@ -417,12 +388,8 @@ body {
   transition: color 0.25s, gap 0.25s var(--ease);
 }
 
-.btn-ghost:hover {
-  color: var(--white);
-  gap: 12px;
-}
+.btn-ghost:hover { color: var(--white); gap: 12px; }
 
-/* ── Metrics ── */
 .hero-metrics {
   display: flex;
   align-items: center;
@@ -430,11 +397,7 @@ body {
   padding-top: 8px;
 }
 
-.metric {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+.metric { display: flex; flex-direction: column; gap: 4px; }
 
 .metric-val {
   font-family: var(--font-title);
@@ -513,7 +476,6 @@ body {
   50%       { transform: translateY(-10px); }
 }
 
-/* Card header */
 .fc-header {
   display: flex;
   align-items: center;
@@ -544,12 +506,8 @@ body {
   transition: background 0.2s, transform 0.2s var(--ease);
 }
 
-.fc-link:hover {
-  background: rgba(0, 230, 112, 0.2);
-  transform: translateX(2px);
-}
+.fc-link:hover { background: rgba(0, 230, 112, 0.2); transform: translateX(2px); }
 
-/* Foto preenchendo a box inteira */
 .fc-photo-full {
   position: relative;
   border-radius: 14px;
@@ -566,7 +524,6 @@ body {
   display: block;
 }
 
-/* Mini-box com os nomes sobreposta na foto */
 .fc-names-box {
   position: absolute;
   bottom: 10px;
@@ -611,7 +568,6 @@ body {
   background: var(--border-sub);
 }
 
-/* Card footer */
 .fc-footer {
   padding-top: 16px;
   border-top: 1px solid var(--border-sub);
@@ -705,9 +661,7 @@ body {
   transition: color 0.25s;
 }
 
-.trust-track span:hover {
-  color: var(--muted);
-}
+.trust-track span:hover { color: var(--muted); }
 
 .trust-track .dot {
   color: var(--border);
