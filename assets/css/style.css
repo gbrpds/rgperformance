@@ -36,7 +36,29 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
+}
+
+/* Top & bottom viewport edge fade */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 997;
+}
+.page-vignette-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 997;
 }
 
 /* Cursor glow that follows the mouse — very subtle orange tint */
@@ -61,44 +83,6 @@ body.cursor-active::after { opacity: 1; }
 ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 2px; }
 
 
-/* ═══════════════════════════════════════════════════════
-   CUSTOM CURSOR
-   ═══════════════════════════════════════════════════════ */
-
-.cursor {
-  position: fixed;
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.35s var(--ease),
-              height 0.35s var(--ease),
-              border-color 0.3s,
-              opacity 0.3s;
-  mix-blend-mode: difference;
-  will-change: left, top;
-}
-.cursor.hover {
-  width: 52px;
-  height: 52px;
-  border-color: rgba(255, 255, 255, 0.65);
-}
-.cursor.hidden { opacity: 0; }
-
-.cursor-dot {
-  position: fixed;
-  width: 4px;
-  height: 4px;
-  background: var(--text);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  will-change: left, top;
-}
 
 
 /* ═══════════════════════════════════════════════════════
@@ -1512,11 +1496,10 @@ body.page-exit {
    CUSTOM YOUTUBE SHORTS PLAYER
    ═══════════════════════════════════════════════════════ */
 
-/* YouTube iframe container — fills video area above controls */
+/* YouTube iframe container — fills full container, controls overlay on top */
 .yt-embed {
   position: absolute;
   inset: 0;
-  bottom: 68px;
   z-index: 1;
 }
 .yt-embed iframe {
@@ -1533,7 +1516,6 @@ body.page-exit {
 .yt-thumb {
   position: absolute;
   inset: 0;
-  bottom: 68px;
   z-index: 3;
   transition: opacity 0.4s ease;
 }
@@ -1573,19 +1555,18 @@ body.page-exit {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Controls bar */
+/* Controls bar — overlays the video with a gradient fade */
 .yt-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 68px;
-  background: #0d0d0d;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  height: 80px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.82) 48%, rgba(0,0,0,0.95) 100%);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
-  padding: 0 10px;
+  padding: 0 10px 10px;
   z-index: 4;
 }
 
@@ -1750,10 +1731,8 @@ body.page-exit {
 
 /* Mobile adjustments */
 @media (max-width: 640px) {
-  .yt-bar    { height: 60px; }
-  .yt-thumb,
-  .yt-embed  { bottom: 60px; }
-  .yt-vol    { display: none; }
+  .yt-bar { height: 70px; }
+  .yt-vol { display: none; }
 }
 
 /* Full-width horizontal (16:9) video grid */
@@ -2229,9 +2208,6 @@ body.page-exit {
   .hero-actions { flex-direction: column; align-items: center; width: 100%; }
   .btn-primary, .btn-outline { width: 100%; justify-content: center; }
 
-  /* ── No custom cursor on touch ── */
-  body { cursor: auto; }
-  .cursor, .cursor-dot { display: none; }
   body::after { display: none; }
 
   /* ── About: photo on top, text below ── */

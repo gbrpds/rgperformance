@@ -3,38 +3,12 @@
    v1.0
    ───────────────────────────────────────── */
 
-// ── Custom Cursor ──────────────────────────────────────
-const cursor    = document.getElementById('cursor');
-const cursorDot = document.getElementById('cursorDot');
-
-if (cursor && cursorDot) {
-  let mouseX = -100, mouseY = -100;
-  let posX   = -100, posY   = -100;
-
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursorDot.style.left = `${mouseX}px`;
-    cursorDot.style.top  = `${mouseY}px`;
-    cursor.classList.remove('hidden');
-  });
-
-  document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
-
-  (function animateCursor() {
-    posX += (mouseX - posX) * 0.1;
-    posY += (mouseY - posY) * 0.1;
-    cursor.style.left = `${posX}px`;
-    cursor.style.top  = `${posY}px`;
-    requestAnimationFrame(animateCursor);
-  })();
-
-  const hoverTargets = 'a, button, .service-item, .work-card, .tool-tag, .nav-link';
-  document.querySelectorAll(hoverTargets).forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-  });
-}
+// ── Page edge vignette (top fade via body::before, bottom via div) ──
+(function () {
+  const el = document.createElement('div');
+  el.className = 'page-vignette-bottom';
+  document.body.appendChild(el);
+})();
 
 
 // ── Cursor glow (body::after tracks the mouse) ─────────
