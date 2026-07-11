@@ -51,8 +51,6 @@ window.addEventListener('scroll', () => {
 
 
 // ── Hero scroll effect ─────────────────────────────────
-// Desktop: blur + scale + fade. Mobile/touch: opacity-only —
-// applying filter to position:fixed causes iOS rendering glitches.
 const heroEl     = document.querySelector('.hero');
 const isTouch    = window.matchMedia('(pointer: coarse)').matches;
 
@@ -74,7 +72,6 @@ function updateHero() {
   }
 }
 
-// RAF loop — runs only while hero is in the viewport
 let _lastScrollY = -1, _heroRafId = null, _heroVisible = true;
 function heroLoop() {
   if (!_heroVisible) { _heroRafId = null; return; }
@@ -86,7 +83,7 @@ if (heroEl) {
   new IntersectionObserver(entries => {
     _heroVisible = entries[0].isIntersecting;
     if (_heroVisible && !_heroRafId) heroLoop();
-    else if (!_heroVisible) updateHero(); // ensure final state applied
+    else if (!_heroVisible) updateHero();
   }, { threshold: 0 }).observe(heroEl);
   heroLoop();
 }
@@ -101,7 +98,6 @@ const revealObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-// Observe both [data-reveal] and [data-reveal="slide-x"]
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
 
@@ -153,7 +149,7 @@ if (backLink) {
 
   let pos = 0;
   let paused = false;
-  const SPEED = 0.55; // px per frame (~33 px/s at 60 fps)
+  const SPEED = 0.55;
 
   function halfWidth() {
     return strip.scrollWidth / 2;
@@ -180,7 +176,6 @@ if (backLink) {
     viewport.addEventListener('mouseenter', () => { paused = true; });
     viewport.addEventListener('mouseleave', () => { paused = false; });
 
-    // Touch drag — lets mobile users swipe the filmstrip
     let touchStartX = 0;
     let touchStartPos = 0;
 
@@ -227,7 +222,7 @@ if (backLink) {
     let current   = 0;
 
     function activateVideo(slide) {
-      if (slide.querySelector('.yt-embed')) return; // handled by custom player
+      if (slide.querySelector('.yt-embed')) return;
       const iframe = slide.querySelector('iframe[data-src]');
       if (iframe) { iframe.src = iframe.dataset.src; iframe.removeAttribute('data-src'); }
     }
@@ -255,13 +250,13 @@ if (backLink) {
     carousel.querySelector('.carousel-btn--next').addEventListener('click', function (e) { e.stopPropagation(); goTo(current + 1); });
     dots.forEach(function (dot, i) { dot.addEventListener('click', function () { goTo(i); }); });
 
-    // Touch / pointer drag
     let startX = 0, isDragging = false;
     track.addEventListener('pointerdown', function (e) { startX = e.clientX; isDragging = true; carousel.classList.add('is-dragging'); track.setPointerCapture(e.pointerId); });
     track.addEventListener('pointerup',   function (e) { if (!isDragging) return; isDragging = false; carousel.classList.remove('is-dragging'); const diff = e.clientX - startX; if (Math.abs(diff) > 40) goTo(diff < 0 ? current + 1 : current - 1); });
-    track.addEventListener('pointermove', function (e) { /* captured — no default scroll interference */ });
+    track.addEventListener('pointermove', function (e) { /* captured */ });
   });
 })();
+
 
 // ── Reel video modal ──────────────────────────────────
 (function initReelModal() {
@@ -308,10 +303,12 @@ if (backLink) {
   }
 
   function handleState(state) {
-    const pp = videoWrap.querySelector('.yt-pp');
+    const pp         = videoWrap.querySelector('.yt-pp');
+    const pauseCover = videoWrap.querySelector('.yt-pause-cover');
     clearInterval(timer);
-    if (state === YT.PlayerState.PLAYING) {
+    if (state === 1 /* PLAYING */) {
       pp.classList.add('playing');
+      if (pauseCover) pauseCover.classList.remove('active');
       timer = setInterval(function () {
         if (!player) return;
         const cur = player.getCurrentTime();
@@ -320,9 +317,13 @@ if (backLink) {
       }, 200);
     } else {
       pp.classList.remove('playing');
-      if (state === YT.PlayerState.ENDED) {
+      if (state === 2 /* PAUSED */) {
+        if (pauseCover) pauseCover.classList.add('active');
+      } else if (state === 0 /* ENDED */) {
         setProgress(0, 0);
-        videoWrap.querySelector('.yt-thumb').classList.remove('gone');
+        const thumbEl = videoWrap.querySelector('.yt-thumb');
+        if (thumbEl) thumbEl.classList.remove('gone');
+        if (pauseCover) pauseCover.classList.remove('active');
       }
     }
   }
@@ -335,13 +336,15 @@ if (backLink) {
         '<img src="https://i.ytimg.com/vi/' + videoId + '/maxresdefault.jpg"' +
           ' onerror="this.src=\'https://i.ytimg.com/vi/' + videoId + '/hqdefault.jpg\'"' +
           ' alt="" loading="lazy">' +
-        '<button class="yt-big-play" aria-label="Reproduzir">' +
+        '<button class="yt-big-play" aria-label="Reproduzir" tabindex="-1">' +
           '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">' +
             '<path d="M4 2.5L15.5 9L4 15.5V2.5Z" fill="currentColor"/>' +
           '</svg>' +
         '</button>' +
       '</div>' +
       '<div class="yt-embed" data-pid="' + pid + '"><div id="' + pid + '"></div></div>' +
+      '<div class="yt-pause-cover"></div>' +
+      '<div class="yt-click-zone"></div>' +
       '<div class="yt-bar">' +
         '<button class="yt-pp" aria-label="Play/Pause">' +
           '<svg class="ic-play" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
@@ -374,37 +377,44 @@ if (backLink) {
           '</button>' +
           '<input type="range" class="yt-vol-slider" min="0" max="100" value="100" aria-label="Volume">' +
         '</div>' +
+        '<button class="yt-fs" aria-label="Tela cheia">' +
+          '<svg class="ic-expand" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<path d="M1 5V1h4M8 1h4v4M12 8v4H8M5 12H1V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+          '<svg class="ic-compress" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<path d="M5 1v4H1M8 1v4h4M12 8H8v4M1 8h4v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</button>' +
       '</div>';
 
     buildWave(videoWrap.querySelector('.yt-wave'), videoId);
 
     const thumb     = videoWrap.querySelector('.yt-thumb');
-    const bigPlay   = videoWrap.querySelector('.yt-big-play');
+    const clickZone = videoWrap.querySelector('.yt-click-zone');
     const pp        = videoWrap.querySelector('.yt-pp');
     const scrub     = videoWrap.querySelector('.yt-scrub');
     const muteBtn   = videoWrap.querySelector('.yt-mute');
     const volSlider = videoWrap.querySelector('.yt-vol-slider');
+    const fsBtn     = videoWrap.querySelector('.yt-fs');
 
-    bigPlay.addEventListener('click', function () {
-      if (player && player.playVideo) { player.playVideo(); thumb.classList.add('gone'); }
-    });
-
-    // Click anywhere on video area to toggle play/pause
-    videoWrap.querySelector('.yt-embed').addEventListener('click', function () {
+    // Click zone — unified handler for whole video area (play + pause)
+    clickZone.addEventListener('click', function () {
       if (!player) return;
-      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+      if (player.getPlayerState() === 1 /* PLAYING */) {
         player.pauseVideo();
       } else {
-        player.playVideo(); thumb.classList.add('gone');
+        player.playVideo();
+        thumb.classList.add('gone');
       }
     });
 
     pp.addEventListener('click', function () {
       if (!player) return;
-      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+      if (player.getPlayerState() === 1 /* PLAYING */) {
         player.pauseVideo();
       } else {
-        player.playVideo(); thumb.classList.add('gone');
+        player.playVideo();
+        thumb.classList.add('gone');
       }
     });
 
@@ -434,12 +444,29 @@ if (backLink) {
       else           { player.unMute(); muteBtn.classList.remove('muted'); }
     });
 
+    fsBtn.addEventListener('click', function () {
+      if (!document.fullscreenElement) {
+        videoWrap.requestFullscreen().catch(function () {});
+      } else {
+        document.exitFullscreen().catch(function () {});
+      }
+    });
+    document.addEventListener('fullscreenchange', function onFsChange() {
+      const isFs = document.fullscreenElement === videoWrap;
+      fsBtn.classList.toggle('is-fs', isFs);
+      // Remove listener when modal closes (videoWrap gets cleared)
+      if (!modal.classList.contains('is-open')) {
+        document.removeEventListener('fullscreenchange', onFsChange);
+      }
+    });
+
     function spawnPlayer() {
       player = new YT.Player(pid, {
         videoId: videoId,
         playerVars: {
           autoplay: 1, controls: 0, rel: 0, modestbranding: 1,
           playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0,
+          origin: window.location.origin,
         },
         events: {
           onReady: function (e) {
@@ -473,6 +500,10 @@ if (backLink) {
   }
 
   function closeModal() {
+    // Exit fullscreen first if active
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(function () {});
+    }
     clearInterval(timer);
     timer = null;
     if (player) {
@@ -492,11 +523,14 @@ if (backLink) {
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
   if (backdrop) backdrop.addEventListener('click', closeModal);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  // Escape closes modal only when not in fullscreen (first Escape exits fullscreen, second closes modal)
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !document.fullscreenElement) closeModal();
+  });
 })();
 
 
-// ── Work grid "ver mais" — shows hidden cards above LIMIT ─────
+// ── Work grid "ver mais" ───────────────────────────────
 (function initWorkMore() {
   const grid = document.querySelector('.work-grid');
   const wrap = document.getElementById('workMoreWrap');
@@ -579,13 +613,15 @@ if (backLink) {
         '<img src="https://i.ytimg.com/vi/' + vid + '/maxresdefault.jpg"' +
           ' onerror="this.src=\'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg\'"' +
           ' alt="" loading="lazy">' +
-        '<button class="yt-big-play" aria-label="Reproduzir">' +
+        '<button class="yt-big-play" aria-label="Reproduzir" tabindex="-1">' +
           '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">' +
             '<path d="M4 2.5L15.5 9L4 15.5V2.5Z" fill="currentColor"/>' +
           '</svg>' +
         '</button>' +
       '</div>' +
       '<div class="yt-embed" data-pid="' + pid + '"><div id="' + pid + '"></div></div>' +
+      '<div class="yt-pause-cover"></div>' +
+      '<div class="yt-click-zone"></div>' +
       '<div class="yt-bar">' +
         '<button class="yt-pp" aria-label="Play/Pause">' +
           '<svg class="ic-play" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
@@ -618,6 +654,14 @@ if (backLink) {
           '</button>' +
           '<input type="range" class="yt-vol-slider" min="0" max="100" value="100" aria-label="Volume">' +
         '</div>' +
+        '<button class="yt-fs" aria-label="Tela cheia">' +
+          '<svg class="ic-expand" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<path d="M1 5V1h4M8 1h4v4M12 8v4H8M5 12H1V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+          '<svg class="ic-compress" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<path d="M5 1v4H1M8 1v4h4M12 8H8v4M1 8h4v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</button>' +
       '</div>'
     );
   }
@@ -643,19 +687,19 @@ if (backLink) {
 
     item.innerHTML = buildHTML(vid, pid);
 
-    // Cache DOM references for the progress updater (avoids repeated querySelector)
     item._els = {
-      done: item.querySelector('.yt-done'),
-      head: item.querySelector('.yt-head'),
-      cur:  item.querySelector('.yt-cur'),
-      t0:   item.querySelector('.yt-t0'),
-      t1:   item.querySelector('.yt-t1'),
-      thumb: item.querySelector('.yt-thumb'),
-      pp:   item.querySelector('.yt-pp'),
-      bars: null, // populated after waveform is built
+      done:       item.querySelector('.yt-done'),
+      head:       item.querySelector('.yt-head'),
+      cur:        item.querySelector('.yt-cur'),
+      t0:         item.querySelector('.yt-t0'),
+      t1:         item.querySelector('.yt-t1'),
+      thumb:      item.querySelector('.yt-thumb'),
+      pp:         item.querySelector('.yt-pp'),
+      pauseCover: item.querySelector('.yt-pause-cover'),
+      bars:       null,
     };
 
-    // Waveform bars — seeded by video ID for a consistent look
+    // Waveform bars
     const wave = item.querySelector('.yt-wave');
     let seed = 0;
     for (let c = 0; c < vid.length; c++) seed = (seed * 31 + vid.charCodeAt(c)) & 0x7fffffff;
@@ -672,11 +716,17 @@ if (backLink) {
     }
     item._els.bars = Array.from(wave.children);
 
-    // Click anywhere on video area to toggle play/pause
-    item.querySelector('.yt-embed').addEventListener('click', function () {
+    // Click zone — single handler for the entire video area
+    item.querySelector('.yt-click-zone').addEventListener('click', function () {
       const p = window._ytPlayers[pid];
-      if (!p) return;
-      if (p.getPlayerState() === YT.PlayerState.PLAYING) {
+      if (!p) {
+        // Lazy-create player (carousel slides)
+        item._pendingPlay = true;
+        item._els.thumb.classList.add('gone');
+        if (window.YT && window.YT.Player) createPlayer(item);
+        return;
+      }
+      if (p.getPlayerState() === 1 /* PLAYING */) {
         p.pauseVideo();
       } else {
         p.playVideo();
@@ -684,27 +734,15 @@ if (backLink) {
       }
     });
 
-    // Large play button
-    item.querySelector('.yt-big-play').addEventListener('click', function () {
-      const p = window._ytPlayers[pid];
-      if (p && p.playVideo) {
-        p.playVideo();
-      } else {
-        item._pendingPlay = true;
-        if (window.YT && window.YT.Player) createPlayer(item);
-      }
-      item.querySelector('.yt-thumb').classList.add('gone');
-    });
-
-    // Mini play/pause
+    // Mini play/pause button in bar
     item.querySelector('.yt-pp').addEventListener('click', function () {
       const p = window._ytPlayers[pid];
       if (!p) return;
-      if (p.getPlayerState() === YT.PlayerState.PLAYING) {
+      if (p.getPlayerState() === 1 /* PLAYING */) {
         p.pauseVideo();
       } else {
         p.playVideo();
-        item.querySelector('.yt-thumb').classList.add('gone');
+        item._els.thumb.classList.add('gone');
       }
     });
 
@@ -743,6 +781,19 @@ if (backLink) {
       if (vol === 0) { p.mute(); muteBtn.classList.add('muted'); }
       else           { p.unMute(); muteBtn.classList.remove('muted'); }
     });
+
+    // Fullscreen button
+    const fsBtn = item.querySelector('.yt-fs');
+    fsBtn.addEventListener('click', function () {
+      if (!document.fullscreenElement) {
+        item.requestFullscreen().catch(function () {});
+      } else {
+        document.exitFullscreen().catch(function () {});
+      }
+    });
+    document.addEventListener('fullscreenchange', function () {
+      fsBtn.classList.toggle('is-fs', document.fullscreenElement === item);
+    });
   });
 
   // ── Load YouTube IFrame API ────────────────────────────
@@ -774,6 +825,7 @@ if (backLink) {
       playerVars: {
         controls: 0, rel: 0, modestbranding: 1,
         playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0,
+        origin: window.location.origin,
       },
       events: {
         onReady: function (e) {
@@ -786,21 +838,23 @@ if (backLink) {
     });
   }
 
-  // Shorts: eager init. Carousel slides: lazy (on first play click).
+  // Shorts: eager init. Carousel slides: lazy (on first click).
   function initAll() {
     items.forEach(function (item) {
       if (item.classList.contains('shorts-item')) createPlayer(item);
     });
   }
 
-  window._ytCreatePlayer = createPlayer; // exposed for external use
+  window._ytCreatePlayer = createPlayer;
 
   function handleState(item, pid, player, state) {
-    const els = item._els || {};
-    const pp  = els.pp || item.querySelector('.yt-pp');
+    const els        = item._els || {};
+    const pp         = els.pp || item.querySelector('.yt-pp');
+    const pauseCover = els.pauseCover || item.querySelector('.yt-pause-cover');
     clearInterval(timers[pid]);
-    if (state === YT.PlayerState.PLAYING) {
+    if (state === 1 /* PLAYING */) {
       pp.classList.add('playing');
+      if (pauseCover) pauseCover.classList.remove('active');
       timers[pid] = setInterval(function () {
         const cur = player.getCurrentTime();
         const dur = player.getDuration() || 1;
@@ -808,10 +862,15 @@ if (backLink) {
       }, 200);
     } else {
       pp.classList.remove('playing');
-      if (state === YT.PlayerState.ENDED) {
+      if (state === 2 /* PAUSED */) {
+        if (pauseCover) pauseCover.classList.add('active');
+      } else if (state === 0 /* ENDED */) {
         setProgress(item, 0, 0);
         const thumb = els.thumb || item.querySelector('.yt-thumb');
-        if (thumb) thumb.classList.remove('gone');
+        if (thumb) {
+          thumb.classList.remove('gone');
+          if (pauseCover) pauseCover.classList.remove('active');
+        }
       }
     }
   }

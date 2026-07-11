@@ -1500,6 +1500,7 @@ body.page-exit {
   position: absolute;
   inset: 0;
   z-index: 1;
+  overflow: hidden;
 }
 .yt-embed iframe {
   position: absolute !important;
@@ -1510,6 +1511,26 @@ body.page-exit {
   border: none;
   display: block;
   pointer-events: none;
+}
+
+/* Pause cover — hides YouTube in-iframe UI when paused */
+.yt-pause-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+.yt-pause-cover.active { opacity: 1; }
+
+/* Click zone — transparent, handles all video-area clicks */
+.yt-click-zone {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  cursor: pointer;
 }
 
 /* Thumbnail shown before first play */
@@ -1566,7 +1587,7 @@ body.page-exit {
   align-items: flex-end;
   gap: 8px;
   padding: 0 10px 10px;
-  z-index: 4;
+  z-index: 5;
 }
 
 /* Play / pause mini-button */
@@ -1728,10 +1749,53 @@ body.page-exit {
   cursor: pointer;
 }
 
+/* Fullscreen toggle button */
+.yt-fs {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+  padding: 0;
+}
+.yt-fs:hover { color: #f97316; }
+.yt-fs .ic-compress { display: none; }
+.yt-fs.is-fs .ic-expand  { display: none; }
+.yt-fs.is-fs .ic-compress { display: flex; }
+
+/* Fullscreen container overrides */
+.shorts-item:fullscreen,
+.shorts-item:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+  transform: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.carousel-slide:fullscreen,
+.carousel-slide:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+}
+.reel-modal-video:fullscreen,
+.reel-modal-video:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
 /* Mobile adjustments */
 @media (max-width: 640px) {
   .yt-bar { height: 70px; }
   .yt-vol { display: none; }
+  .yt-fs  { display: none; }
 }
 
 /* Full-width horizontal (16:9) video grid */
