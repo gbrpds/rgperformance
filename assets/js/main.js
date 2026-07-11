@@ -454,6 +454,11 @@ if (backLink) {
         if (typeof _prev === 'function') _prev();
         spawnPlayer();
       };
+      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(s);
+      }
     }
 
     modal.classList.add('is-open');

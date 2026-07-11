@@ -1526,6 +1526,7 @@ body.page-exit {
   height: 100%;
   border: none;
   display: block;
+  pointer-events: none;
 }
 
 /* Thumbnail shown before first play */
