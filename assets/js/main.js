@@ -231,10 +231,17 @@ if (backLink) {
     let current   = 0;
 
     function activateVideo(slide) {
+      if (slide.querySelector('.yt-embed')) return; // handled by custom player
       const iframe = slide.querySelector('iframe[data-src]');
       if (iframe) { iframe.src = iframe.dataset.src; iframe.removeAttribute('data-src'); }
     }
     function deactivateVideo(slide) {
+      const embed = slide.querySelector('.yt-embed');
+      if (embed && window._ytPlayers) {
+        const p = window._ytPlayers[embed.id];
+        if (p && p.pauseVideo) { try { p.pauseVideo(); } catch (e) {} }
+        return;
+      }
       const iframe = slide.querySelector('iframe');
       if (iframe && iframe.src) { iframe.dataset.src = iframe.src; iframe.src = ''; }
     }
@@ -354,30 +361,23 @@ if (backLink) {
 })();
 
 
-// ── Custom YouTube Shorts Player ──────────────────────
-(function initYTShorts() {
-  const items = Array.from(document.querySelectorAll('.shorts-item'));
+// ── Custom YouTube Player (Shorts + carousel video slides) ──
+(function initYTPlayers() {
+  function isYT(src) { return src && src.includes('youtube'); }
+
+  const shorts = Array.from(document.querySelectorAll('.shorts-item'));
+  const carouselSlides = Array.from(document.querySelectorAll('.carousel-slide')).filter(function (s) {
+    const f = s.querySelector('iframe');
+    return f && isYT(f.src || f.dataset.src || '');
+  });
+  const items = shorts.concat(carouselSlides);
   if (!items.length) return;
 
-  const players = {};
-  const timers  = {};
+  window._ytPlayers = {};
+  const timers = {};
 
-  // ── Transform each .shorts-item into the custom player ──
-  items.forEach(function (item, idx) {
-    const iframe = item.querySelector('iframe');
-    if (!iframe) return;
-
-    const src   = iframe.src || iframe.dataset.src || '';
-    const match = src.match(/embed\/([^?&]+)/);
-    if (!match) return;
-
-    const vid = match[1];
-    const pid = 'ytpl-' + idx;
-    item.dataset.pid = pid;
-    item.dataset.vid = vid;
-    item._pendingPlay = false;
-
-    item.innerHTML =
+  function buildHTML(vid, pid) {
+    return (
       '<div class="yt-thumb">' +
         '<img src="https://i.ytimg.com/vi/' + vid + '/maxresdefault.jpg"' +
           ' onerror="this.src=\'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg\'"' +
@@ -408,9 +408,45 @@ if (backLink) {
           '<span class="yt-t0">00:00</span>' +
           '<span class="yt-t1">--:--</span>' +
         '</div>' +
-      '</div>';
+        '<div class="yt-vol">' +
+          '<button class="yt-mute" aria-label="Volume">' +
+            '<svg class="ic-vol" width="14" height="14" viewBox="0 0 14 14" fill="none">' +
+              '<path d="M2 5h3l4-3v10L5 9H2V5z" fill="currentColor"/>' +
+              '<path d="M10.5 5.5a2.5 2.5 0 0 1 0 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>' +
+            '</svg>' +
+            '<svg class="ic-muted" width="14" height="14" viewBox="0 0 14 14" fill="none">' +
+              '<path d="M2 5h3l4-3v10L5 9H2V5z" fill="currentColor"/>' +
+              '<path d="M10.5 5.5 12 7m0 0 1.5-1.5M12 7l1.5 1.5M12 7l-1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>' +
+            '</svg>' +
+          '</button>' +
+          '<input type="range" class="yt-vol-slider" min="0" max="100" value="100" aria-label="Volume">' +
+        '</div>' +
+      '</div>'
+    );
+  }
 
-    // Generate waveform bars (seeded by video ID for consistency)
+  // ── Transform items ────────────────────────────────────
+  items.forEach(function (item, idx) {
+    const iframe = item.querySelector('iframe');
+    if (!iframe) return;
+    const src   = iframe.src || iframe.dataset.src || '';
+    const match = src.match(/embed\/([^?&]+)/);
+    if (!match) return;
+
+    const vid = match[1];
+    const pid = 'ytpl-' + idx;
+    item.dataset.pid  = pid;
+    item.dataset.vid  = vid;
+    item._pendingPlay = false;
+
+    if (item.classList.contains('carousel-slide')) {
+      item.style.position = 'relative';
+      item.style.overflow = 'hidden';
+    }
+
+    item.innerHTML = buildHTML(vid, pid);
+
+    // Waveform bars — seeded by video ID for a consistent look
     const wave = item.querySelector('.yt-wave');
     let seed = 0;
     for (let c = 0; c < vid.length; c++) seed = (seed * 31 + vid.charCodeAt(c)) & 0x7fffffff;
@@ -426,21 +462,21 @@ if (backLink) {
       wave.appendChild(bar);
     }
 
-    // Large play button → start playback
+    // Large play button
     item.querySelector('.yt-big-play').addEventListener('click', function () {
-      const p = players[pid];
+      const p = window._ytPlayers[pid];
       if (p && p.playVideo) {
         p.playVideo();
-        item.querySelector('.yt-thumb').classList.add('gone');
       } else {
         item._pendingPlay = true;
-        item.querySelector('.yt-thumb').classList.add('gone');
+        if (window.YT && window.YT.Player) createPlayer(item);
       }
+      item.querySelector('.yt-thumb').classList.add('gone');
     });
 
-    // Mini play/pause button
+    // Mini play/pause
     item.querySelector('.yt-pp').addEventListener('click', function () {
-      const p = players[pid];
+      const p = window._ytPlayers[pid];
       if (!p) return;
       if (p.getPlayerState() === YT.PlayerState.PLAYING) {
         p.pauseVideo();
@@ -450,20 +486,46 @@ if (backLink) {
       }
     });
 
-    // Scrubber → seek
+    // Scrubber seek
     const scrub = item.querySelector('.yt-scrub');
     scrub.addEventListener('click', function (e) {
-      const p = players[pid];
+      const p = window._ytPlayers[pid];
       if (!p) return;
       const r     = scrub.getBoundingClientRect();
       const ratio = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
       const dur   = p.getDuration() || 0;
       if (dur) { p.seekTo(ratio * dur, true); setProgress(item, ratio, ratio * dur); }
     });
+
+    // Volume
+    const muteBtn   = item.querySelector('.yt-mute');
+    const volSlider = item.querySelector('.yt-vol-slider');
+
+    muteBtn.addEventListener('click', function () {
+      const p = window._ytPlayers[pid];
+      if (!p) return;
+      if (p.isMuted()) {
+        p.unMute(); p.setVolume(parseInt(volSlider.value) || 100);
+        muteBtn.classList.remove('muted');
+      } else {
+        p.mute();
+        muteBtn.classList.add('muted');
+      }
+    });
+
+    volSlider.addEventListener('input', function () {
+      const p = window._ytPlayers[pid];
+      if (!p) return;
+      const vol = parseInt(volSlider.value);
+      p.setVolume(vol);
+      if (vol === 0) { p.mute(); muteBtn.classList.add('muted'); }
+      else           { p.unMute(); muteBtn.classList.remove('muted'); }
+    });
   });
 
   // ── Load YouTube IFrame API ────────────────────────────
   function loadAPI() {
+    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return;
     const s = document.createElement('script');
     s.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(s);
@@ -480,30 +542,36 @@ if (backLink) {
     loadAPI();
   }
 
-  // ── Create YT.Player for each item ────────────────────
-  function initAll() {
-    items.forEach(function (item) {
-      const pid = item.dataset.pid;
-      const vid = item.dataset.vid;
-      if (!pid || !vid) return;
+  function createPlayer(item) {
+    const pid = item.dataset.pid;
+    const vid = item.dataset.vid;
+    if (!pid || !vid || window._ytPlayers[pid]) return;
 
-      players[pid] = new YT.Player(pid, {
-        videoId: vid,
-        playerVars: {
-          controls: 0, rel: 0, modestbranding: 1,
-          playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0,
+    window._ytPlayers[pid] = new YT.Player(pid, {
+      videoId: vid,
+      playerVars: {
+        controls: 0, rel: 0, modestbranding: 1,
+        playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0,
+      },
+      events: {
+        onReady: function (e) {
+          const dur = e.target.getDuration();
+          item.querySelector('.yt-t1').textContent = fmt(dur);
+          if (item._pendingPlay) { e.target.playVideo(); item._pendingPlay = false; }
         },
-        events: {
-          onReady: function (e) {
-            const dur = e.target.getDuration();
-            item.querySelector('.yt-t1').textContent = fmt(dur);
-            if (item._pendingPlay) { e.target.playVideo(); item._pendingPlay = false; }
-          },
-          onStateChange: function (e) { handleState(item, pid, players[pid], e.data); },
-        },
-      });
+        onStateChange: function (e) { handleState(item, pid, window._ytPlayers[pid], e.data); },
+      },
     });
   }
+
+  // Shorts: eager init. Carousel slides: lazy (on first play click).
+  function initAll() {
+    items.forEach(function (item) {
+      if (item.classList.contains('shorts-item')) createPlayer(item);
+    });
+  }
+
+  window._ytCreatePlayer = createPlayer; // exposed for external use
 
   function handleState(item, pid, player, state) {
     const pp = item.querySelector('.yt-pp');
