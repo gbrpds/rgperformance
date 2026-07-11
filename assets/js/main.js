@@ -389,6 +389,16 @@ if (backLink) {
       if (player && player.playVideo) { player.playVideo(); thumb.classList.add('gone'); }
     });
 
+    // Click anywhere on video area to toggle play/pause
+    videoWrap.querySelector('.yt-embed').addEventListener('click', function () {
+      if (!player) return;
+      if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo(); thumb.classList.add('gone');
+      }
+    });
+
     pp.addEventListener('click', function () {
       if (!player) return;
       if (player.getPlayerState() === YT.PlayerState.PLAYING) {
@@ -661,6 +671,18 @@ if (backLink) {
       wave.appendChild(bar);
     }
     item._els.bars = Array.from(wave.children);
+
+    // Click anywhere on video area to toggle play/pause
+    item.querySelector('.yt-embed').addEventListener('click', function () {
+      const p = window._ytPlayers[pid];
+      if (!p) return;
+      if (p.getPlayerState() === YT.PlayerState.PLAYING) {
+        p.pauseVideo();
+      } else {
+        p.playVideo();
+        item._els.thumb.classList.add('gone');
+      }
+    });
 
     // Large play button
     item.querySelector('.yt-big-play').addEventListener('click', function () {
