@@ -188,7 +188,6 @@ body.cursor-active::after { opacity: 1; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  will-change: transform;
 }
 
 /* Spacer that creates document scroll space for the fixed hero */
@@ -1548,7 +1547,6 @@ body.page-exit {
   padding-left: 3px;
   color: #fff;
   transition: background 0.2s, transform 0.25s;
-  backdrop-filter: blur(6px);
   z-index: 1;
 }
 .yt-big-play:hover {
@@ -1888,9 +1886,7 @@ body.page-exit {
   font-size: 10px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.65);
   padding: 3px 8px;
   letter-spacing: 0.05em;
 }
@@ -2154,6 +2150,7 @@ body.page-exit {
 
 /* Stagger delays */
 [data-reveal-delay="80"]  { transition-delay:  80ms; }
+[data-reveal-delay="100"] { transition-delay: 100ms; }
 [data-reveal-delay="120"] { transition-delay: 120ms; }
 [data-reveal-delay="160"] { transition-delay: 160ms; }
 [data-reveal-delay="240"] { transition-delay: 240ms; }

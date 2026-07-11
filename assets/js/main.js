@@ -12,10 +12,17 @@
 
 
 // ── Cursor glow (body::after tracks the mouse) ─────────
+let _glowRaf = false, _glowX = 0, _glowY = 0;
 document.addEventListener('mousemove', e => {
-  document.documentElement.style.setProperty('--cx', `${e.clientX}px`);
-  document.documentElement.style.setProperty('--cy', `${e.clientY}px`);
-  document.body.classList.add('cursor-active');
+  _glowX = e.clientX; _glowY = e.clientY;
+  if (_glowRaf) return;
+  _glowRaf = true;
+  requestAnimationFrame(() => {
+    document.documentElement.style.setProperty('--cx', `${_glowX}px`);
+    document.documentElement.style.setProperty('--cy', `${_glowY}px`);
+    document.body.classList.add('cursor-active');
+    _glowRaf = false;
+  });
 });
 document.addEventListener('mouseleave', () => {
   document.body.classList.remove('cursor-active');
@@ -67,13 +74,22 @@ function updateHero() {
   }
 }
 
-// RAF loop — throttled: only runs updateHero when scrollY actually changed
-let _lastScrollY = -1;
-(function heroLoop() {
+// RAF loop — runs only while hero is in the viewport
+let _lastScrollY = -1, _heroRafId = null, _heroVisible = true;
+function heroLoop() {
+  if (!_heroVisible) { _heroRafId = null; return; }
   const sy = window.scrollY;
   if (sy !== _lastScrollY) { _lastScrollY = sy; updateHero(); }
-  requestAnimationFrame(heroLoop);
-})();
+  _heroRafId = requestAnimationFrame(heroLoop);
+}
+if (heroEl) {
+  new IntersectionObserver(entries => {
+    _heroVisible = entries[0].isIntersecting;
+    if (_heroVisible && !_heroRafId) heroLoop();
+    else if (!_heroVisible) updateHero(); // ensure final state applied
+  }, { threshold: 0 }).observe(heroEl);
+  heroLoop();
+}
 
 
 // ── Scroll reveal (IntersectionObserver) ───────────────
@@ -143,15 +159,21 @@ if (backLink) {
     return strip.scrollWidth / 2;
   }
 
-  (function tick() {
+  let _reelRafId = null, _reelVisible = false;
+  function tick() {
+    if (!_reelVisible) { _reelRafId = null; return; }
     if (!paused) {
       pos += SPEED;
       const hw = halfWidth();
       if (pos >= hw) pos -= hw;
       strip.style.transform = `translateX(-${pos}px)`;
     }
-    requestAnimationFrame(tick);
-  })();
+    _reelRafId = requestAnimationFrame(tick);
+  }
+  new IntersectionObserver(entries => {
+    _reelVisible = entries[0].isIntersecting;
+    if (_reelVisible && !_reelRafId) tick();
+  }, { threshold: 0 }).observe(strip.parentElement || strip);
 
   const viewport = document.querySelector('.reel-viewport');
   if (viewport) {
@@ -611,6 +633,18 @@ if (backLink) {
 
     item.innerHTML = buildHTML(vid, pid);
 
+    // Cache DOM references for the progress updater (avoids repeated querySelector)
+    item._els = {
+      done: item.querySelector('.yt-done'),
+      head: item.querySelector('.yt-head'),
+      cur:  item.querySelector('.yt-cur'),
+      t0:   item.querySelector('.yt-t0'),
+      t1:   item.querySelector('.yt-t1'),
+      thumb: item.querySelector('.yt-thumb'),
+      pp:   item.querySelector('.yt-pp'),
+      bars: null, // populated after waveform is built
+    };
+
     // Waveform bars — seeded by video ID for a consistent look
     const wave = item.querySelector('.yt-wave');
     let seed = 0;
@@ -626,6 +660,7 @@ if (backLink) {
       bar.style.height = Math.min(96, Math.max(8, h)) + '%';
       wave.appendChild(bar);
     }
+    item._els.bars = Array.from(wave.children);
 
     // Large play button
     item.querySelector('.yt-big-play').addEventListener('click', function () {
@@ -739,7 +774,8 @@ if (backLink) {
   window._ytCreatePlayer = createPlayer; // exposed for external use
 
   function handleState(item, pid, player, state) {
-    const pp = item.querySelector('.yt-pp');
+    const els = item._els || {};
+    const pp  = els.pp || item.querySelector('.yt-pp');
     clearInterval(timers[pid]);
     if (state === YT.PlayerState.PLAYING) {
       pp.classList.add('playing');
@@ -752,20 +788,33 @@ if (backLink) {
       pp.classList.remove('playing');
       if (state === YT.PlayerState.ENDED) {
         setProgress(item, 0, 0);
-        item.querySelector('.yt-thumb').classList.remove('gone');
+        const thumb = els.thumb || item.querySelector('.yt-thumb');
+        if (thumb) thumb.classList.remove('gone');
       }
     }
   }
 
   function setProgress(item, ratio, cur) {
-    item.querySelector('.yt-done').style.width = (ratio * 100) + '%';
-    item.querySelector('.yt-head').style.left  = (ratio * 100) + '%';
-    const curStr = fmt(cur || 0);
-    item.querySelector('.yt-cur').textContent  = curStr;
-    item.querySelector('.yt-t0').textContent   = curStr;
-    const bars = item.querySelectorAll('.yt-wb');
-    const n    = Math.floor(ratio * bars.length);
-    bars.forEach(function (b, i) { b.classList.toggle('on', i < n); });
+    const els = item._els;
+    const pct = (ratio * 100) + '%';
+    if (els) {
+      els.done.style.width = pct;
+      els.head.style.left  = pct;
+      const curStr = fmt(cur || 0);
+      els.cur.textContent = curStr;
+      els.t0.textContent  = curStr;
+      const n = Math.floor(ratio * els.bars.length);
+      els.bars.forEach(function (b, i) { b.classList.toggle('on', i < n); });
+    } else {
+      item.querySelector('.yt-done').style.width = pct;
+      item.querySelector('.yt-head').style.left  = pct;
+      const curStr = fmt(cur || 0);
+      item.querySelector('.yt-cur').textContent = curStr;
+      item.querySelector('.yt-t0').textContent  = curStr;
+      const bars = item.querySelectorAll('.yt-wb');
+      const n    = Math.floor(ratio * bars.length);
+      bars.forEach(function (b, i) { b.classList.toggle('on', i < n); });
+    }
   }
 
   function fmt(s) {

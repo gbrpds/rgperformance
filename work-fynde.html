@@ -2,13 +2,15 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:,">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fynde — Gabriel Pereira</title>
   <meta name="description" content="Projeto Fynde — Ecossistema &amp; Gestão de Investimento Imobiliário." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" /></noscript>
 
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
@@ -48,7 +50,7 @@
 
     <div class="hero-bg" aria-hidden="true">
       <div class="noise"></div>
-      <img class="wh-banner" src="assets/images/banners/fynde-banner.jpg" alt="" aria-hidden="true">
+      <img class="wh-banner" loading="lazy" src="assets/images/banners/fynde-banner.webp" alt="" aria-hidden="true">
       <div class="glow-orb glow-orb--1"></div>
       <div class="glow-orb glow-orb--2"></div>
     </div>
@@ -234,7 +236,7 @@
 
         <a href="work-gaby.html" class="work-card" data-reveal>
           <div class="work-thumb work-thumb--1">
-            <img src="assets/images/thumbs/gaby.jpg" alt="Gabrielly Lehmkuhl">
+            <img src="assets/images/thumbs/gaby.webp" alt="Gabrielly Lehmkuhl">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -245,7 +247,7 @@
 
         <a href="work-vida-italiana.html" class="work-card" data-reveal data-reveal-delay="80">
           <div class="work-thumb work-thumb--2">
-            <img src="assets/images/thumbs/vida-italiana.jpg" alt="Vida Italiana na Prática">
+            <img src="assets/images/thumbs/vida-italiana.webp" alt="Vida Italiana na Prática">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -256,7 +258,7 @@
 
         <a href="work-gg-peitas.html" class="work-card" data-reveal data-reveal-delay="160">
           <div class="work-thumb work-thumb--3">
-            <img src="assets/images/thumbs/gg-peitas.png" alt="GG Peitas">
+            <img src="assets/images/thumbs/gg-peitas.webp" alt="GG Peitas">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -267,7 +269,7 @@
 
         <a href="work-daniel.html" class="work-card" data-reveal data-reveal-delay="80">
           <div class="work-thumb work-thumb--1">
-            <img src="assets/images/thumbs/daniel.png" alt="Daniel Ridieri">
+            <img src="assets/images/thumbs/daniel.webp" alt="Daniel Ridieri">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -278,7 +280,7 @@
 
         <a href="work-rafaela.html" class="work-card" data-reveal data-reveal-delay="160">
           <div class="work-thumb work-thumb--2">
-            <img src="assets/images/thumbs/rafaela.jpg" alt="Dra. Rafaela Lehmkuhl">
+            <img src="assets/images/thumbs/rafaela.webp" alt="Dra. Rafaela Lehmkuhl">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -289,7 +291,7 @@
 
         <a href="work-yara.html" class="work-card" data-reveal data-reveal-delay="240">
           <div class="work-thumb work-thumb--3">
-            <img src="assets/images/thumbs/yara.jpg" alt="Yara Gaeta">
+            <img src="assets/images/thumbs/yara.webp" alt="Yara Gaeta">
             <div class="work-thumb-overlay"><span class="work-play-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 3.5L17 10L5 16.5V3.5Z" fill="currentColor"/></svg></span></div>
           </div>
           <div class="work-meta">
@@ -310,6 +312,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
