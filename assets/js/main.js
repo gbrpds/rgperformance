@@ -354,6 +354,195 @@ if (backLink) {
 })();
 
 
+// ── Custom YouTube Shorts Player ──────────────────────
+(function initYTShorts() {
+  const items = Array.from(document.querySelectorAll('.shorts-item'));
+  if (!items.length) return;
+
+  const players = {};
+  const timers  = {};
+
+  // ── Transform each .shorts-item into the custom player ──
+  items.forEach(function (item, idx) {
+    const iframe = item.querySelector('iframe');
+    if (!iframe) return;
+
+    const src   = iframe.src || iframe.dataset.src || '';
+    const match = src.match(/embed\/([^?&]+)/);
+    if (!match) return;
+
+    const vid = match[1];
+    const pid = 'ytpl-' + idx;
+    item.dataset.pid = pid;
+    item.dataset.vid = vid;
+    item._pendingPlay = false;
+
+    item.innerHTML =
+      '<div class="yt-thumb">' +
+        '<img src="https://i.ytimg.com/vi/' + vid + '/maxresdefault.jpg"' +
+          ' onerror="this.src=\'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg\'"' +
+          ' alt="" loading="lazy">' +
+        '<button class="yt-big-play" aria-label="Reproduzir">' +
+          '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">' +
+            '<path d="M4 2.5L15.5 9L4 15.5V2.5Z" fill="currentColor"/>' +
+          '</svg>' +
+        '</button>' +
+      '</div>' +
+      '<div class="yt-embed" id="' + pid + '"></div>' +
+      '<div class="yt-bar">' +
+        '<button class="yt-pp" aria-label="Play/Pause">' +
+          '<svg class="ic-play" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<path d="M3 1.5L11.5 6.5L3 11.5V1.5Z" fill="currentColor"/>' +
+          '</svg>' +
+          '<svg class="ic-pause" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
+            '<rect x="2" y="1.5" width="3.5" height="10" rx="1" fill="currentColor"/>' +
+            '<rect x="7.5" y="1.5" width="3.5" height="10" rx="1" fill="currentColor"/>' +
+          '</svg>' +
+        '</button>' +
+        '<div class="yt-scrub">' +
+          '<div class="yt-wave"></div>' +
+          '<div class="yt-rail">' +
+            '<div class="yt-done"></div>' +
+            '<div class="yt-head"><span class="yt-cur">00:00</span></div>' +
+          '</div>' +
+          '<span class="yt-t0">00:00</span>' +
+          '<span class="yt-t1">--:--</span>' +
+        '</div>' +
+      '</div>';
+
+    // Generate waveform bars (seeded by video ID for consistency)
+    const wave = item.querySelector('.yt-wave');
+    let seed = 0;
+    for (let c = 0; c < vid.length; c++) seed = (seed * 31 + vid.charCodeAt(c)) & 0x7fffffff;
+    for (let i = 0; i < 44; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'yt-wb';
+      const t = i / 44;
+      const h = 18 +
+        Math.abs(Math.sin(seed * 0.003 + t * 11.3)) * 32 +
+        Math.abs(Math.sin(seed * 0.007 + t * 23.7)) * 22 +
+        Math.abs(Math.sin(seed * 0.013 + t * 41.1)) * 14;
+      bar.style.height = Math.min(96, Math.max(8, h)) + '%';
+      wave.appendChild(bar);
+    }
+
+    // Large play button → start playback
+    item.querySelector('.yt-big-play').addEventListener('click', function () {
+      const p = players[pid];
+      if (p && p.playVideo) {
+        p.playVideo();
+        item.querySelector('.yt-thumb').classList.add('gone');
+      } else {
+        item._pendingPlay = true;
+        item.querySelector('.yt-thumb').classList.add('gone');
+      }
+    });
+
+    // Mini play/pause button
+    item.querySelector('.yt-pp').addEventListener('click', function () {
+      const p = players[pid];
+      if (!p) return;
+      if (p.getPlayerState() === YT.PlayerState.PLAYING) {
+        p.pauseVideo();
+      } else {
+        p.playVideo();
+        item.querySelector('.yt-thumb').classList.add('gone');
+      }
+    });
+
+    // Scrubber → seek
+    const scrub = item.querySelector('.yt-scrub');
+    scrub.addEventListener('click', function (e) {
+      const p = players[pid];
+      if (!p) return;
+      const r     = scrub.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+      const dur   = p.getDuration() || 0;
+      if (dur) { p.seekTo(ratio * dur, true); setProgress(item, ratio, ratio * dur); }
+    });
+  });
+
+  // ── Load YouTube IFrame API ────────────────────────────
+  function loadAPI() {
+    const s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+  }
+
+  if (window.YT && window.YT.Player) {
+    initAll();
+  } else {
+    const _prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (typeof _prev === 'function') _prev();
+      initAll();
+    };
+    loadAPI();
+  }
+
+  // ── Create YT.Player for each item ────────────────────
+  function initAll() {
+    items.forEach(function (item) {
+      const pid = item.dataset.pid;
+      const vid = item.dataset.vid;
+      if (!pid || !vid) return;
+
+      players[pid] = new YT.Player(pid, {
+        videoId: vid,
+        playerVars: {
+          controls: 0, rel: 0, modestbranding: 1,
+          playsinline: 1, iv_load_policy: 3, disablekb: 1, fs: 0,
+        },
+        events: {
+          onReady: function (e) {
+            const dur = e.target.getDuration();
+            item.querySelector('.yt-t1').textContent = fmt(dur);
+            if (item._pendingPlay) { e.target.playVideo(); item._pendingPlay = false; }
+          },
+          onStateChange: function (e) { handleState(item, pid, players[pid], e.data); },
+        },
+      });
+    });
+  }
+
+  function handleState(item, pid, player, state) {
+    const pp = item.querySelector('.yt-pp');
+    clearInterval(timers[pid]);
+    if (state === YT.PlayerState.PLAYING) {
+      pp.classList.add('playing');
+      timers[pid] = setInterval(function () {
+        const cur = player.getCurrentTime();
+        const dur = player.getDuration() || 1;
+        setProgress(item, cur / dur, cur);
+      }, 200);
+    } else {
+      pp.classList.remove('playing');
+      if (state === YT.PlayerState.ENDED) {
+        setProgress(item, 0, 0);
+        item.querySelector('.yt-thumb').classList.remove('gone');
+      }
+    }
+  }
+
+  function setProgress(item, ratio, cur) {
+    item.querySelector('.yt-done').style.width = (ratio * 100) + '%';
+    item.querySelector('.yt-head').style.left  = (ratio * 100) + '%';
+    const curStr = fmt(cur || 0);
+    item.querySelector('.yt-cur').textContent  = curStr;
+    item.querySelector('.yt-t0').textContent   = curStr;
+    const bars = item.querySelectorAll('.yt-wb');
+    const n    = Math.floor(ratio * bars.length);
+    bars.forEach(function (b, i) { b.classList.toggle('on', i < n); });
+  }
+
+  function fmt(s) {
+    if (!s || isNaN(s)) return '00:00';
+    s = Math.floor(s);
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+})();
+
+
 // ── Smooth scroll for anchor links ────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
