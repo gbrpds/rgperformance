@@ -212,7 +212,7 @@ if (backLink) {
     function deactivateVideo(slide) {
       const embed = slide.querySelector('.yt-embed');
       if (embed && window._ytPlayers) {
-        const p = window._ytPlayers[embed.id];
+        const p = window._ytPlayers[embed.dataset.pid];
         if (p && p.pauseVideo) { try { p.pauseVideo(); } catch (e) {} }
         return;
       }
@@ -319,7 +319,7 @@ if (backLink) {
           '</svg>' +
         '</button>' +
       '</div>' +
-      '<div class="yt-embed" id="' + pid + '"></div>' +
+      '<div class="yt-embed" data-pid="' + pid + '"><div id="' + pid + '"></div></div>' +
       '<div class="yt-bar">' +
         '<button class="yt-pp" aria-label="Play/Pause">' +
           '<svg class="ic-play" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
@@ -553,7 +553,7 @@ if (backLink) {
           '</svg>' +
         '</button>' +
       '</div>' +
-      '<div class="yt-embed" id="' + pid + '"></div>' +
+      '<div class="yt-embed" data-pid="' + pid + '"><div id="' + pid + '"></div></div>' +
       '<div class="yt-bar">' +
         '<button class="yt-pp" aria-label="Play/Pause">' +
           '<svg class="ic-play" width="13" height="13" viewBox="0 0 13 13" fill="none">' +
