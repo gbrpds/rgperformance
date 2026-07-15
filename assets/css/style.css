@@ -1077,7 +1077,8 @@ html {
   justify-content: center;
   margin-top: 48px;
 }
-.work-card--hidden { display: none; }
+/* !important needed to beat `a.work-card { display: flex }` (higher specificity) */
+.work-card--hidden { display: none !important; }
 
 /* Ver mais / Ver menos toggle icon */
 .work-load-more .wml-icon {
@@ -2011,6 +2012,7 @@ body.page-exit {
 /* Viewport wrapper — hosts the overlay nav */
 .reel-viewport {
   position: relative;
+  padding-bottom: 56px;
 }
 
 /* Static navigation row — centered below the filmstrip */
