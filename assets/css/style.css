@@ -26,7 +26,10 @@
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
+  /* Wheel smoothing is handled in JS (see smoothScroll); anchor jumps use
+     scrollIntoView({behavior:'smooth'}). Keeping CSS smooth here would
+     fight the per-frame JS scroll, so it stays 'auto'. */
+  scroll-behavior: auto;
 }
 
 body {
@@ -78,9 +81,22 @@ body::after {
 }
 body.cursor-active::after { opacity: 1; }
 
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 2px; }
+/* Custom orange scrollbar */
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: #0d0d0d; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #f97316, #c2560c);
+  border-radius: 8px;
+  border: 2px solid #0d0d0d;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #fb8836, #f97316);
+}
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #f97316 #0d0d0d;
+}
 
 
 
@@ -1063,6 +1079,14 @@ body.cursor-active::after { opacity: 1; }
 }
 .work-card--hidden { display: none; }
 
+/* Ver mais / Ver menos toggle icon */
+.work-load-more .wml-icon {
+  transition: transform 0.35s var(--ease);
+}
+.work-load-more.is-expanded .wml-icon {
+  transform: rotate(180deg);
+}
+
 /* work-card as <a> element */
 a.work-card {
   text-decoration: none;
@@ -1502,12 +1526,15 @@ body.page-exit {
   z-index: 1;
   overflow: hidden;
 }
+/* Overscan the iframe so YouTube's own bottom overlay (video caption +
+   "Shorts" label + title bar) is cropped out of the visible frame.
+   Bottom-biased: crops ~4% off the top and ~14% off the bottom. */
 .yt-embed iframe {
   position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
+  top: -4% !important;
+  left: -4% !important;
+  width: 108% !important;
+  height: 118% !important;
   border: none;
   display: block;
   pointer-events: none;
@@ -1986,24 +2013,15 @@ body.page-exit {
   position: relative;
 }
 
+/* Static navigation row — centered below the filmstrip */
 .reel-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 66vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  pointer-events: auto;
   z-index: 10;
-}
-
-.reel-viewport:hover .reel-nav {
-  opacity: 1;
 }
 
 .reel-btn {
@@ -2033,7 +2051,7 @@ body.page-exit {
 .reel-strip-wrap {
   overflow: hidden;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 24px;
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
@@ -2182,7 +2200,7 @@ body.page-exit {
       black calc(100% - 40px), transparent 100%
     );
   }
-  .reel-nav { display: none; } /* arrows hidden on touch */
+  .reel-nav { margin-top: 16px; } /* stay visible, centered below */
 }
 
 

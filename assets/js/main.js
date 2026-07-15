@@ -149,7 +149,8 @@ if (backLink) {
 
   let pos = 0;
   let paused = false;
-  const SPEED = 0.55;
+  let stopped = false; // set permanently once a user opens a video
+  const SPEED = 0.18;  // px per frame — slow, cinematic drift
 
   function halfWidth() {
     return strip.scrollWidth / 2;
@@ -158,7 +159,7 @@ if (backLink) {
   let _reelRafId = null, _reelVisible = false;
   function tick() {
     if (!_reelVisible) { _reelRafId = null; return; }
-    if (!paused) {
+    if (!paused && !stopped) {
       pos += SPEED;
       const hw = halfWidth();
       if (pos >= hw) pos -= hw;
@@ -170,6 +171,9 @@ if (backLink) {
     _reelVisible = entries[0].isIntersecting;
     if (_reelVisible && !_reelRafId) tick();
   }, { threshold: 0 }).observe(strip.parentElement || strip);
+
+  // Once a user clicks any video the strip stops moving for good
+  strip.addEventListener('click', () => { stopped = true; });
 
   const viewport = document.querySelector('.reel-viewport');
   if (viewport) {
@@ -545,11 +549,39 @@ if (backLink) {
     return;
   }
 
-  cards.slice(LIMIT).forEach(c => c.classList.add('work-card--hidden'));
+  const extras = cards.slice(LIMIT);
+  const label  = btn.querySelector('.wml-label');
+  let expanded = false;
+
+  // Take over reveal control for the extra cards so they animate on expand
+  extras.forEach(c => {
+    revealObserver.unobserve(c);
+    c.classList.remove('revealed');
+    c.style.transitionDelay = '0ms';
+    c.classList.add('work-card--hidden');
+  });
+
+  function setLabel(txt) { if (label) label.textContent = txt; }
 
   btn.addEventListener('click', () => {
-    grid.querySelectorAll('.work-card--hidden').forEach(c => c.classList.remove('work-card--hidden'));
-    wrap.style.display = 'none';
+    if (!expanded) {
+      // Expand — reveal with a soft stagger
+      extras.forEach(c => c.classList.remove('work-card--hidden'));
+      void grid.offsetHeight; // force reflow so the transition fires
+      extras.forEach((c, i) => setTimeout(() => c.classList.add('revealed'), i * 70));
+      setLabel('Ver menos');
+      btn.classList.add('is-expanded');
+      expanded = true;
+    } else {
+      // Collapse — fade out, then hide from layout
+      extras.forEach(c => c.classList.remove('revealed'));
+      setTimeout(() => extras.forEach(c => c.classList.add('work-card--hidden')), 480);
+      setLabel('Ver mais projetos');
+      btn.classList.remove('is-expanded');
+      expanded = false;
+      const workSection = document.getElementById('work');
+      if (workSection) workSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 })();
 
@@ -916,3 +948,50 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+
+// ── Momentum smooth scroll (desktop wheel) ─────────────
+// Lightweight lerp-based smoothing for a premium, inertial feel.
+// Disabled on touch devices (already smooth) and for reduced-motion users.
+(function smoothScroll() {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = window.matchMedia('(pointer: coarse)').matches;
+  if (reduce || coarse) return;
+
+  let target  = window.scrollY;
+  let current = window.scrollY;
+  let rafId   = null;
+  const EASE  = 0.11;
+
+  function maxScroll() {
+    return document.documentElement.scrollHeight - window.innerHeight;
+  }
+  function clamp(v) { return Math.max(0, Math.min(v, maxScroll())); }
+
+  function animate() {
+    current += (target - current) * EASE;
+    if (Math.abs(target - current) < 0.5) {
+      current = target;
+      window.scrollTo(0, current);
+      rafId = null;
+      return;
+    }
+    window.scrollTo(0, current);
+    rafId = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('wheel', e => {
+    // Don't hijack while a modal is open (body scroll is locked)
+    if (document.body.style.overflow === 'hidden') return;
+    if (e.ctrlKey) return; // pinch-zoom gesture
+    e.preventDefault();
+    const mult = e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1);
+    target = clamp(target + e.deltaY * mult);
+    if (rafId === null) { current = window.scrollY; rafId = requestAnimationFrame(animate); }
+  }, { passive: false });
+
+  // Resync when the user scrolls by other means (keyboard, scrollbar, anchor)
+  window.addEventListener('scroll', () => {
+    if (rafId === null) { target = window.scrollY; current = window.scrollY; }
+  }, { passive: true });
+})();
